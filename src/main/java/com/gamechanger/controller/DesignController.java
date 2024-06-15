@@ -22,7 +22,7 @@ public class DesignController {
     @PostMapping("/start-image-generation")
     public ResponseEntity<String> createAIDesign(@RequestBody @Valid PromptDto promptDto) {
         String id = designService.createAIDesign(promptDto.getPrompt());
-        log.info("Input prompt: {}, Work id: {}", promptDto.getPrompt(), id);
+        log.info("Input prompt: {}, Task id: {}", promptDto.getPrompt(), id);
         return ResponseEntity.ok(id);
     }
 

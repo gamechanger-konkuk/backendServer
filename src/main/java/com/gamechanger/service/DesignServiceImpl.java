@@ -22,7 +22,6 @@ public class DesignServiceImpl implements DesignService {
         Map<String, String> request = new HashMap<>();
         request.put("text", prompt);
         Map<String, String> response = aiClient.generateImage(request);
-        log.info("Task id: {}", response.get("id"));
         return response.get("id");
     }
 
