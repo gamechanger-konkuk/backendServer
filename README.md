@@ -37,8 +37,6 @@ ai 서버에 프롬프트를 전송하는 post 요청을 /submit-text로 보냅�
 
 해당 데이터는 json 형식으로 전송하게 됩니다.
 ```
-ex)
-
 {
   "prompt": "example"
 }
