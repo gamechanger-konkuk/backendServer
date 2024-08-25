@@ -8,8 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.GetUrlRequest;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.model.*;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -53,9 +52,21 @@ public class AwsS3ServiceImpl implements FileService {
     }
 
     @Override
-    public MultipartFile downloadFile(String fileName) {
-
-        return null;
+    public byte[] downloadFile(String fileName) {
+        try {
+            GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(fileName)
+                    .build();
+            return s3Client.getObject(getObjectRequest)
+                    .readAllBytes();
+        } catch (NoSuchKeyException e) {
+            log.error("File with key '{}' does not exist in bucket '{}'", fileName, bucketName, e);
+            throw new RuntimeException("File not found in S3 bucket", e);
+        } catch (Exception e) {
+            log.error("Failed to download file: {}", fileName, e);
+            throw new RuntimeException("Failed to download file", e);
+        }
     }
 
     public String getFileName(MultipartFile multipartFile) {
