@@ -1,15 +1,18 @@
 package com.gamechanger.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.awt.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
 @Builder
@@ -18,11 +21,50 @@ import java.util.List;
 @Table(name = "clothes")
 public class Clothes {
     @Id
+    @Column(length = 16)
+    @NotNull
     private String clothesName;
-    private String userName;    // cloth's owner name
+    private String roomId;
+    @Column(length = 10)
+    @NotNull
     private String shape;   // 기본 : 반팔 char나 int로 바이트 수 줄여도 됨
-    private Color background;   // 다른 색 필요하면 문자열로 해서 색 지정할지도 / 혹은 프론트에서 색 정해서 전달
+    @Column(length = 20)
+    @NotNull
+    private String background;
 
-    @OneToMany
-    private List<Design> imageFileList;
+    @CreatedDate
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
+    @LastModifiedDate
+    private LocalDateTime modifiedAt;
+
+//    @ManyToOne
+//    private User user;
+
+    @OneToMany(mappedBy = "clothes", cascade = CascadeType.MERGE)
+    private List<Image> imageFileList = new ArrayList<>();
+
+    public void addImageFile(Image image) {
+        for (int i = 0; i < imageFileList.size(); i++) {
+            if (imageFileList.get(i).getFileUrl().equals(image.getFileUrl())) {
+                imageFileList.set(i, image);
+                return;
+            }
+        }
+        imageFileList.add(image);
+    }
+
+    @Override
+    public String toString() {
+        String str = "Clothes{" +
+                "clothesName='" + clothesName + '\'' +
+//                ", userName='" + user.getUserName() + '\'' +
+                ", shape='" + shape + '\'' +
+                ", background='" + background + '\'' +
+                ", fileList.size()='" + imageFileList.size() + '\'';
+        for (int i = 0; i < imageFileList.size(); i++) {
+            str += ", image " + i + "= " + imageFileList.get(i).toString();
+        }
+        return str;
+    }
 }
