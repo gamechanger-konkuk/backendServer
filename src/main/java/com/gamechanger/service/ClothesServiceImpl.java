@@ -15,7 +15,6 @@ import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
-@Service
 public class ClothesServiceImpl implements ClothesService {
 
     private final ClothesRepository clothesRepository;
