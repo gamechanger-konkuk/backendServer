@@ -6,6 +6,7 @@ import com.gamechanger.service.ClothesServiceImpl;
 import com.gamechanger.service.ImageService;
 import com.gamechanger.service.LiveblocksService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
@@ -22,6 +23,7 @@ public class ClothesConfig {
         this.liveblocksService = liveblocksService;
     }
 
+    @Bean
     public ClothesService clothesService() {
         return new ClothesServiceImpl(clothesRepository, imageService, liveblocksService);
     }
