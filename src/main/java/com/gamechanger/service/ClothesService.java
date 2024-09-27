@@ -1,10 +1,20 @@
 package com.gamechanger.service;
 
 import com.gamechanger.domain.Clothes;
+import com.gamechanger.domain.Image;
+import org.json.simple.parser.ParseException;
+
+import java.util.List;
+import java.util.Optional;
 
 public interface ClothesService {
-    Clothes createClothes(String userName, String shape);
-    Clothes getClothes(String userName, String clothesName);
-    void saveClothes(String userName, Clothes clothes);
-    Clothes deleteClothes(String userName, String clothesName);
+    // clothes
+    Clothes createClothes(String clothesName) throws ParseException;
+    Optional<Clothes> getClothes(String clothesName);
+    List<Clothes> getAllClothes();
+    Clothes saveClothes(String clothesName);
+    void deleteClothes(String clothesName);
+    // image
+    Image createAiImageByPrompt(String clothesName, String style, String prompt);
+    Image removeImageBackground(String clothesName, String fileUrl);
 }
