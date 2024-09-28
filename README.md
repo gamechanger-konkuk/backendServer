@@ -1,10 +1,6 @@
 # 백엔드 서버
 
----
-
 ## 사전 준비
-
----
 
 백엔드 서버를 위한 포트 localhost:8080이 사용 중이 아니어야 합니다.
 
@@ -24,16 +20,12 @@ mysql의 ID/PW, S3의 키, Liveblocks의 키는 src/main/resources/application-c
 
 ![image](https://github.com/user-attachments/assets/001a369b-977e-4986-8e2d-c9ccf329b6a3)
 
----
-
 ## 실행 방법
 
 ```
 git clone http://github.com/gamechanger-konkuk/backendServer.git
 cd backendServer
 ```
-
----
 
 ### Windows
 
@@ -42,8 +34,6 @@ gradlew build
 gradlew bootRun
 ```
 
----
-
 ### Mac
 
 ```
@@ -51,11 +41,7 @@ gradlew bootRun
 ./gradlew bootRun
 ```
 
----
-
 ## api 목록
-
----
 
 ### Clothes
 
