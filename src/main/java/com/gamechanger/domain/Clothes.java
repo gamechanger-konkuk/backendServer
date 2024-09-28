@@ -41,16 +41,10 @@ public class Clothes {
 //    @ManyToOne
 //    private User user;
 
-    @OneToMany(mappedBy = "clothes", cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "clothes", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private List<Image> imageFileList = new ArrayList<>();
 
     public void addImageFile(Image image) {
-        for (int i = 0; i < imageFileList.size(); i++) {
-            if (imageFileList.get(i).getFileUrl().equals(image.getFileUrl())) {
-                imageFileList.set(i, image);
-                return;
-            }
-        }
         imageFileList.add(image);
     }
 
