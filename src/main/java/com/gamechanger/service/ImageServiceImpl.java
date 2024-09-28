@@ -30,10 +30,11 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public Image removeImageBackground(String fileUrl) {
+    public Image removeImageBackground(Clothes clothes, String fileUrl) {
         byte[] downloadFile = fileService.downloadFile(fileUrl);
         byte[] responseImage = aiClient.removeImageBackground(downloadFile);
         Image uploadImage = this.uploadImage(responseImage, "front");
+        uploadImage.setClothes(clothes);
         return imageRepository.save(uploadImage);
     }
 
