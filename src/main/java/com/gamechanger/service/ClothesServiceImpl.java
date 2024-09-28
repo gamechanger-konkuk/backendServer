@@ -4,10 +4,10 @@ import com.gamechanger.domain.Clothes;
 import com.gamechanger.domain.Image;
 import com.gamechanger.repository.ClothesRepository;
 import com.gamechanger.util.ClothesUtils;
+import com.gamechanger.util.FileUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +64,7 @@ public class ClothesServiceImpl implements ClothesService {
     public void deleteClothes(String clothesName) {
         Clothes clothes = clothesRepository.findByClothesName(clothesName).get();
         for (Image image : clothes.getImageFileList()) {
-            imageService.deleteImage(image.getFileUrl());
+            imageService.deleteImage(image.getFileName());
         }
         String roomId = clothes.getRoomId();
         liveblocksService.deleteRoom(roomId);
@@ -74,13 +74,16 @@ public class ClothesServiceImpl implements ClothesService {
 
     @Override
     public Image createAiImageByPrompt(String clothesName, String style, String prompt) {
-        Image aiImageByPrompt = imageService.createAiImageByPrompt(style, prompt);
-        clothesRepository.findByClothesName(clothesName).ifPresent(c -> c.addImageFile(aiImageByPrompt));
+        log.info("Clothes: {}, Image Style: {}, Prompt: {} received.", clothesName, style, prompt);
+        Clothes clothes = clothesRepository.findByClothesName(clothesName).get();
+        Image aiImageByPrompt = imageService.createAiImageByPrompt(clothes, style, prompt);
+        clothes.addImageFile(aiImageByPrompt);
         return aiImageByPrompt;
     }
 
     @Override
     public Image removeImageBackground(String clothesName, String fileUrl) {
+        log.info("Clothes: {}, File: {} remove background.", clothesName, FileUtils.getFileNameFromUrl(fileUrl));
         Image removedImage = imageService.removeImageBackground(fileUrl);
         clothesRepository.findByClothesName(clothesName).ifPresent(c -> c.addImageFile(removedImage));
         return removedImage;

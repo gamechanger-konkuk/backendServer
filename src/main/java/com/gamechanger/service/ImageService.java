@@ -1,10 +1,11 @@
 package com.gamechanger.service;
 
+import com.gamechanger.domain.Clothes;
 import com.gamechanger.domain.Image;
 
 public interface ImageService {
     // ai
-    Image createAiImageByPrompt(String style, String prompt);
+    Image createAiImageByPrompt(Clothes clothes, String style, String prompt);
 //    Image createAiImageByImage(String style, String prompt, String imageId, MultipartFile inputImage);
     Image removeImageBackground(String fileUrl);
     // s3

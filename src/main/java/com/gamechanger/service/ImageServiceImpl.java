@@ -1,6 +1,7 @@
 package com.gamechanger.service;
 
 import com.gamechanger.client.AiClient;
+import com.gamechanger.domain.Clothes;
 import com.gamechanger.domain.Image;
 import com.gamechanger.dto.ai.image.CreateImageRequestByPromptToAi;
 import com.gamechanger.repository.ImageRepository;
@@ -17,13 +18,14 @@ public class ImageServiceImpl implements ImageService {
     private final ImageRepository imageRepository;
 
     @Override
-    public Image createAiImageByPrompt(String style, String prompt) {
+    public Image createAiImageByPrompt(Clothes clothes, String style, String prompt) {
         CreateImageRequestByPromptToAi request = CreateImageRequestByPromptToAi.builder()
                 .style(style)
                 .text_prompt(prompt)
                 .build();
         byte[] responseImage = aiClient.generateImageByPrompt(request);
         Image uploadImage = this.uploadImage(responseImage, "front");
+        uploadImage.setClothes(clothes);
         return imageRepository.save(uploadImage);
     }
 
@@ -59,9 +61,9 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public void deleteImage(String fileUrl) {
-        fileService.deleteFile(fileUrl);
-        imageRepository.deleteById(fileUrl);
+    public void deleteImage(String fileName) {
+        fileService.deleteFile(fileName);
+        imageRepository.deleteById(fileName);
     }
 
 }

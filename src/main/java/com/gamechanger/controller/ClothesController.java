@@ -39,24 +39,14 @@ public class ClothesController {
     }
 
     @GetMapping("/view")
-    public ResponseEntity<List<CreateClothesOutputDto>> viewAllClothes() {
+    public ResponseEntity<List<Clothes>> viewAllClothes() {
         List<Clothes> allClothes = clothesService.getAllClothes();
         if (allClothes.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        List<CreateClothesOutputDto> responseAllClothes = new ArrayList<>();
-        for (Clothes c : allClothes) {
-            CreateClothesOutputDto response = CreateClothesOutputDto.builder()
-                    .roomId(c.getRoomId())
-                    .clothesName(c.getClothesName())
-                    .createdAt(c.getCreatedAt().toString())
-                    .modifiedAt(c.getModifiedAt().toString())
-                    .build();
-            responseAllClothes.add(response);
-        }
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(responseAllClothes);
+                .body(allClothes);
     }
 
     @GetMapping("/name/{clothesName}")
