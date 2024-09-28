@@ -1,10 +1,30 @@
 # 백엔드 서버
 
+---
+
 ## 사전 준비
+
+---
 
 백엔드 서버를 위한 포트 localhost:8080이 사용 중이 아니어야 합니다.
 
-ai 서버가 http://127.0.0.1:8082로 열려 있는 상태여야 합니다.
+ai 서버가 http://localhost:8000으로 열려 있는 상태여야 합니다.
+
+AWS S3 버킷이 있어야 합니다. 해당 버킷의 정보는 src/main/resources/application-aws.yml에 작성되어야 합니다.
+
+![image](https://github.com/user-attachments/assets/ac52984b-f9ac-44c4-b1e7-5e3899296d2b)
+
+mysql을 설치하고, "tindy"라는 database를 생성해야 합니다.
+
+AWS S3의 접근 권한이 있는 키를 발급해야 합니다. access key와 secret key가 필요합니다.
+
+Liveblocks API에 프로젝트를 생성하고, 해당 프로젝트의 secret key를 발급해야 합니다.
+
+mysql의 ID/PW, S3의 키, Liveblocks의 키는 src/main/resources/application-cridentials.yml에 작성되어야 합니다.
+
+![image](https://github.com/user-attachments/assets/001a369b-977e-4986-8e2d-c9ccf329b6a3)
+
+---
 
 ## 실행 방법
 
@@ -13,12 +33,16 @@ git clone http://github.com/gamechanger-konkuk/backendServer.git
 cd backendServer
 ```
 
+---
+
 ### Windows
 
 ```
 gradlew build
 gradlew bootRun
 ```
+
+---
 
 ### Mac
 
@@ -27,36 +51,23 @@ gradlew bootRun
 ./gradlew bootRun
 ```
 
-## api 설명
+---
 
-### POST
+## api 목록
 
-프론트에서 백엔드로 프롬프트를 전송할 때 /start-image-generation으로 post 요청을 보냅니다.
+---
 
-ai 서버에 프롬프트를 전송하는 post 요청을 /submit-text로 보냅니다.
+### Clothes
 
-해당 데이터는 json 형식으로 전송하게 됩니다.
-```
-{
-  "prompt": "example"
-}
-```
-ai 서버에서는 해당 요청에 대한 작업 id를 백엔드 서버로 전송합니다.
+- POST /clothes/create : 티셔츠 생성
+- GET /clothes/view : 모든 티셔츠 조회
+- GET /clothes/name/{clothesName} : 특정 티셔츠 조회
+- PUT /clothes/name/{clothesName} : 해당 티셔츠 저장
+- DELETE /clothes/name/{clothesName} : 해당 티셔츠 삭제
 
-해당 데이터는 문자열(ai 서버와 조율 가능)로 전송하게 됩니다.
+### Image
 
-작업 id를 프론트에게 바로 전송합니다.
+- POST /clothes/image/generate : 프롬프트를 이용한 이미지 생성
+- POST /clothes/image/remove-background : 이미지 배경 제거
 
-### GET
 
-ai 서버에서 이미지를 받을 때는 작업 id를 필요로 합니다. 
-
-따라서 프론트에서는 post 요청 시에 받은 작업 id를 기억해야 합니다.
-
-프론트는 백엔드 서버에 /get-image/{task_id}로 get 요청을 보냅니다.
-
-백엔드 서버는 ai 서버에 이미지를 요청하는 get 요청을 /get-image/{task_id}로 보냅니다.
-
-현재 설정은 ai 서버에서 png 파일을 백엔드 서버로 전송합니다.
-
-백엔드 서버는 프론트에게 해당 png 파일을 전송합니다.
