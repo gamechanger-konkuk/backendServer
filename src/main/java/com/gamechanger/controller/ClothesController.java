@@ -4,6 +4,7 @@ import com.gamechanger.domain.Clothes;
 import com.gamechanger.dto.front.clothes.CreateClothesInputDto;
 import com.gamechanger.dto.front.clothes.CreateClothesOutputDto;
 import com.gamechanger.service.ClothesService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
@@ -23,7 +24,7 @@ public class ClothesController {
     private final ClothesService clothesService;
 
     @PostMapping("/create")
-    public ResponseEntity<CreateClothesOutputDto> createClothes(@RequestBody CreateClothesInputDto createClothesInputDto) throws ParseException {
+    public ResponseEntity<CreateClothesOutputDto> createClothes(@Valid @RequestBody CreateClothesInputDto createClothesInputDto) throws ParseException {
         String clothesName = createClothesInputDto.getClothesName();
         Clothes clothes = clothesService.createClothes(clothesName);
         CreateClothesOutputDto response = CreateClothesOutputDto.builder()
