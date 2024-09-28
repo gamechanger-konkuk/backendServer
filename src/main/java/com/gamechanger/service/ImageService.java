@@ -7,7 +7,7 @@ public interface ImageService {
     // ai
     Image createAiImageByPrompt(Clothes clothes, String style, String prompt);
 //    Image createAiImageByImage(String style, String prompt, String imageId, MultipartFile inputImage);
-    Image removeImageBackground(String fileUrl);
+    Image removeImageBackground(Clothes clothes, String fileUrl);
     // s3
     Image uploadImage(byte[] image, String view);
     Image getImage(String fileUrl);
