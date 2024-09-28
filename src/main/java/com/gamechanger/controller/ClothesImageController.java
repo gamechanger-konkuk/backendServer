@@ -5,6 +5,7 @@ import com.gamechanger.dto.front.image.CreateImageRequestByPromptDto;
 import com.gamechanger.dto.front.image.FileResponseDto;
 import com.gamechanger.dto.front.image.RemoveBackgroundRequestDto;
 import com.gamechanger.service.ClothesService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -20,7 +21,7 @@ public class ClothesImageController {
     private final ClothesService clothesService;
 
     @PostMapping("/generate")
-    public ResponseEntity<FileResponseDto> createAiImageByPrompt(@RequestBody CreateImageRequestByPromptDto createImageRequestDto) {
+    public ResponseEntity<FileResponseDto> createAiImageByPrompt(@Valid @RequestBody CreateImageRequestByPromptDto createImageRequestDto) {
         Image aiImage = clothesService.createAiImageByPrompt(createImageRequestDto.getClothesName(), createImageRequestDto.getDesignStyle(), createImageRequestDto.getPrompt());
         FileResponseDto response = FileResponseDto.builder()
                 .imageId(createImageRequestDto.getImageId())
