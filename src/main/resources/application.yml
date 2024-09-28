@@ -9,7 +9,7 @@ spring:
       - credentials
 
   datasource:
-    url: jdbc:mysql://localhost:3306/gamechanger
+    url: jdbc:mysql://localhost:3306/tindy
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
