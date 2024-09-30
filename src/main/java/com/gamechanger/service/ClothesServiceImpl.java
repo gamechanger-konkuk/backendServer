@@ -30,8 +30,7 @@ public class ClothesServiceImpl implements ClothesService {
                 .shape("half")
                 .imageFileList(new ArrayList<>())
                 .build();
-        String[] defaultAccesses = new String[1];
-        defaultAccesses[0] = "room:write";
+        String[] defaultAccesses = {"room:write"};
         String responseRoomId = liveblocksService.createRoom(clothes.getRoomId(), defaultAccesses);
         log.info("Clothes Name: {}, Room Id: {} created.", clothesName, responseRoomId);
         return clothesRepository.save(clothes);
