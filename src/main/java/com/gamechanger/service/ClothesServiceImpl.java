@@ -68,7 +68,7 @@ public class ClothesServiceImpl implements ClothesService {
         }
         String roomId = clothes.getRoomId();
         liveblocksService.deleteRoom(roomId);
-        clothesRepository.deleteById(clothesName);
+        clothesRepository.deleteByClothesName(clothesName);
         log.info("Clothes Name: {}, Room id: {} deleted.", clothesName, roomId);
     }
 

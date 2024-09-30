@@ -1,5 +1,6 @@
 package com.gamechanger.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -20,7 +21,9 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name = "clothes")
 public class Clothes {
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
+    private Long systemClothesId;
     @Column(length = 16)
     @NotNull
     private String clothesName;
