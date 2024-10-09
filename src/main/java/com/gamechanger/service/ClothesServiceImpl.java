@@ -95,9 +95,9 @@ public class ClothesServiceImpl implements ClothesService {
 
     @Override
     public Image removeImageBackground(String clothesName, String fileUrl) {
-        log.info("Clothes: {}, File: {} remove background.", clothesName, FileUtils.getFileNameFromUrl(fileUrl));
         Clothes clothes = clothesRepository.findByClothesName(clothesName).get();
         Image removedImage = imageService.removeImageBackground(clothes, fileUrl);
+        log.info("Clothes: {}, File: {} remove background.", clothesName, FileUtils.getFileNameFromUrl(fileUrl));
         clothes.addImageFile(removedImage);
         return removedImage;
     }
