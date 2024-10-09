@@ -7,7 +7,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateImageRequestByPromptDto {
+public class CreateImageRequestByPrompt {
     @NotNull
     private String clothesName;
     @NotNull

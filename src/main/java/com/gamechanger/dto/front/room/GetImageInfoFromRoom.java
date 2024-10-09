@@ -14,11 +14,11 @@ import java.util.Map;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetImageInfoFromRoomDto {
+public class GetImageInfoFromRoom {
     @JsonProperty("layerIds")
     @NotNull
     private List<String> imageList;
     @JsonProperty("layers")
     @NotNull
-    private Map<String, ImageInfoDto> imageInfo;
+    private Map<String, ImageInfo> imageInfo;
 }

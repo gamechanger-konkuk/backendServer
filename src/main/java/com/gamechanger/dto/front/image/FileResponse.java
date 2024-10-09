@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FileResponseDto {
+public class FileResponse {
     private String imageId;
     private String roomId;
     private String imageUrl;
