@@ -75,9 +75,13 @@ public class ClothesServiceImpl implements ClothesService {
 
     @Override
     public Clothes changeClothesName(String oldClothesName, String newClothesName) {
-        Clothes clothes = clothesRepository.changeClothesName(oldClothesName, newClothesName);
-        log.info("Clothes: {} name changed to {}.", oldClothesName, newClothesName);
-        return clothes;
+        clothesRepository.changeClothesName(oldClothesName, newClothesName);
+        Optional<Clothes> changedClothes = clothesRepository.findByClothesName(newClothesName);
+        if (changedClothes.isPresent()) {
+            log.info("Clothes: {} name changed to {}.", oldClothesName, newClothesName);
+            return changedClothes.get();
+        }
+        return null;
     }
 
     @Override
