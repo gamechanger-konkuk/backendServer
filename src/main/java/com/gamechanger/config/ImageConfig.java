@@ -13,19 +13,19 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ImageConfig {
 
-    private final AiClient aiClient;
-    private final FileService fileService;
     private final ImageRepository imageRepository;
+    private final FileService fileService;
+    private final AiClient aiClient;
 
     @Autowired
-    public ImageConfig(AiClient aiClient, FileService fileService, ImageRepository imageRepository) {
-        this.aiClient = aiClient;
-        this.fileService = fileService;
+    public ImageConfig(ImageRepository imageRepository, FileService fileService, AiClient aiClient) {
         this.imageRepository = imageRepository;
+        this.fileService = fileService;
+        this.aiClient = aiClient;
     }
 
     @Bean
     public ImageService imageService() {
-        return new ImageServiceImpl(aiClient, fileService, imageRepository);
+        return new ImageServiceImpl(imageRepository, fileService, aiClient);
     }
 }
