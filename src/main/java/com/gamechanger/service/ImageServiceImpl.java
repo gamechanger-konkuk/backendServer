@@ -13,9 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class ImageServiceImpl implements ImageService {
 
-    private final AiClient aiClient;
-    private final FileService fileService;
     private final ImageRepository imageRepository;
+    private final FileService fileService;
+    private final AiClient aiClient;
 
     @Override
     public Image createAiImageByPrompt(Clothes clothes, String style, String prompt) {
