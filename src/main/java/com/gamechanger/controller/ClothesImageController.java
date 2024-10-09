@@ -1,9 +1,9 @@
 package com.gamechanger.controller;
 
 import com.gamechanger.domain.Image;
-import com.gamechanger.dto.front.image.CreateImageRequestByPromptDto;
-import com.gamechanger.dto.front.image.FileResponseDto;
-import com.gamechanger.dto.front.image.RemoveBackgroundRequestDto;
+import com.gamechanger.dto.front.image.CreateImageRequestByPrompt;
+import com.gamechanger.dto.front.image.FileResponse;
+import com.gamechanger.dto.front.image.RemoveBackgroundRequest;
 import com.gamechanger.service.ClothesService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,10 +21,10 @@ public class ClothesImageController {
     private final ClothesService clothesService;
 
     @PostMapping("/generate")
-    public ResponseEntity<FileResponseDto> createAiImageByPrompt(@Valid @RequestBody CreateImageRequestByPromptDto createImageRequestDto) {
-        Image aiImage = clothesService.createAiImageByPrompt(createImageRequestDto.getClothesName(), createImageRequestDto.getDesignStyle(), createImageRequestDto.getPrompt());
-        FileResponseDto response = FileResponseDto.builder()
-                .imageId(createImageRequestDto.getImageId())
+    public ResponseEntity<FileResponse> createAiImageByPrompt(@Valid @RequestBody CreateImageRequestByPrompt createImageRequest) {
+        Image aiImage = clothesService.createAiImageByPrompt(createImageRequest.getClothesName(), createImageRequest.getDesignStyle(), createImageRequest.getPrompt());
+        FileResponse response = FileResponse.builder()
+                .imageId(createImageRequest.getImageId())
                 .roomId(aiImage.getClothes().getRoomId())
                 .imageUrl(aiImage.getFileUrl())
                 .build();
@@ -34,10 +34,10 @@ public class ClothesImageController {
     }
 
     @PostMapping("/remove-background")
-    public ResponseEntity<FileResponseDto> removeImageBackground(@RequestBody RemoveBackgroundRequestDto removeBackgroundRequestDto) {
-        Image removedImage = clothesService.removeImageBackground(removeBackgroundRequestDto.getClothesName(), removeBackgroundRequestDto.getImageUrl());
-        FileResponseDto response = FileResponseDto.builder()
-                .imageId(removeBackgroundRequestDto.getImageId())
+    public ResponseEntity<FileResponse> removeImageBackground(@RequestBody RemoveBackgroundRequest removeBackgroundRequest) {
+        Image removedImage = clothesService.removeImageBackground(removeBackgroundRequest.getClothesName(), removeBackgroundRequest.getImageUrl());
+        FileResponse response = FileResponse.builder()
+                .imageId(removeBackgroundRequest.getImageId())
                 .roomId(removedImage.getClothes().getRoomId())
                 .imageUrl(removedImage.getFileUrl())
                 .build();
