@@ -7,11 +7,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
+@Service
 public class LiveblocksService {
 
     private final LiveblocksClient liveblocksClient;

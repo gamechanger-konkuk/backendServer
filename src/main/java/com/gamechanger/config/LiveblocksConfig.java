@@ -11,20 +11,8 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class LiveblocksConfig {
-    private final LiveblocksClient liveblocksClient;
-
     @Value("${spring.liveBlocks.secretKey}")
     private String secretKey;
-
-    @Autowired
-    public LiveblocksConfig(LiveblocksClient liveblocksClient) {
-        this.liveblocksClient = liveblocksClient;
-    }
-
-    @Bean
-    public LiveblocksService liveblocksService() {
-        return new LiveblocksService(liveblocksClient);
-    }
 
     @Bean
     public RequestInterceptor requestInterceptor() {
