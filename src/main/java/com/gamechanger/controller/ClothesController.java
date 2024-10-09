@@ -1,9 +1,11 @@
 package com.gamechanger.controller;
 
 import com.gamechanger.domain.Clothes;
-import com.gamechanger.dto.front.clothes.CreateClothesInputDto;
-import com.gamechanger.dto.front.clothes.CreateClothesOutputDto;
+import com.gamechanger.dto.front.clothes.ChangeClothesNameRequest;
+import com.gamechanger.dto.front.clothes.CreateClothesRequest;
+import com.gamechanger.dto.front.clothes.ClothesResponse;
 import com.gamechanger.service.ClothesService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,10 +26,10 @@ public class ClothesController {
     private final ClothesService clothesService;
 
     @PostMapping("/create")
-    public ResponseEntity<CreateClothesOutputDto> createClothes(@Valid @RequestBody CreateClothesInputDto createClothesInputDto) throws ParseException {
-        String clothesName = createClothesInputDto.getClothesName();
+    public ResponseEntity<ClothesResponse> createClothes(@Valid @RequestBody CreateClothesRequest createClothesRequest) throws ParseException {
+        String clothesName = createClothesRequest.getClothesName();
         Clothes clothes = clothesService.createClothes(clothesName);
-        CreateClothesOutputDto response = CreateClothesOutputDto.builder()
+        ClothesResponse response = ClothesResponse.builder()
                 .roomId(clothes.getRoomId())
                 .clothesName(clothes.getClothesName())
                 .createdAt(clothes.getCreatedAt().toString())
@@ -50,12 +52,12 @@ public class ClothesController {
     }
 
     @GetMapping("/name/{clothesName}")
-    public ResponseEntity<CreateClothesOutputDto> viewOneClothes(@PathVariable("clothesName") String clothesName) {
+    public ResponseEntity<ClothesResponse> viewOneClothes(@PathVariable("clothesName") String clothesName) {
         Optional<Clothes> clothes = clothesService.getClothes(clothesName);
         if (clothes.isPresent()) {
             log.info("Clothes Name: {} found.", clothesName);
             Clothes findClothes = clothes.get();
-            CreateClothesOutputDto response = CreateClothesOutputDto.builder()
+            ClothesResponse response = ClothesResponse.builder()
                     .roomId(findClothes.getRoomId())
                     .clothesName(findClothes.getClothesName())
                     .createdAt(findClothes.getCreatedAt().toString())
@@ -82,4 +84,18 @@ public class ClothesController {
         return ResponseEntity.noContent().build();
     }
 
+    @Transactional
+    @PutMapping("/change-name")
+    public ResponseEntity<ClothesResponse> changeClothesName(@RequestBody ChangeClothesNameRequest request) {
+        Clothes clothes = clothesService.changeClothesName(request.getOldClothesName(), request.getNewClothesName());
+        ClothesResponse response = ClothesResponse.builder()
+                .clothesName(clothes.getClothesName())
+                .roomId(clothes.getRoomId())
+                .createdAt(clothes.getCreatedAt().toString())
+                .modifiedAt(clothes.getModifiedAt().toString())
+                .build();
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response);
+    }
 }

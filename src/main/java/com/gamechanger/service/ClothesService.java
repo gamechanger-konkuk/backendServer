@@ -14,6 +14,7 @@ public interface ClothesService {
     List<Clothes> getAllClothes();
     Clothes saveClothes(String clothesName);
     void deleteClothes(String clothesName);
+    Clothes changeClothesName(String oldClothesName, String newClothesName);
     // image
     Image createAiImageByPrompt(String clothesName, String style, String prompt);
     Image removeImageBackground(String clothesName, String fileUrl);
