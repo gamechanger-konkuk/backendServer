@@ -3,7 +3,6 @@ package com.gamechanger.service;
 import com.gamechanger.domain.Clothes;
 import com.gamechanger.domain.Image;
 import com.gamechanger.repository.ClothesRepository;
-import com.gamechanger.util.ClothesUtils;
 import com.gamechanger.util.FileUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +11,7 @@ import org.json.simple.parser.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,13 +25,15 @@ public class ClothesServiceImpl implements ClothesService {
     public Clothes createClothes(String clothesName) throws ParseException {
         Clothes clothes = Clothes.builder()
                 .clothesName(clothesName)
-                .roomId(ClothesUtils.makeRoomIdBysClothesName(clothesName))
+                .roomId(String.valueOf(UUID.randomUUID()))
                 .background("white")
                 .shape("half")
                 .imageFileList(new ArrayList<>())
                 .build();
         String[] defaultAccesses = {"room:write"};
         String responseRoomId = liveblocksService.createRoom(clothes.getRoomId(), defaultAccesses);
+        // 룸 생성은 컨트롤러에서 하던지, save를 먼저 하던지 해야 할 듯?
+        // NotNull이나 컬럼 길이 제한 같은게 레포에 save할 때 검사하는 것 같은데, 룸을 먼저 생성하니까 룸은 생성되고 옷은 생성 안되게 됨.
         log.info("Clothes Name: {}, Room Id: {} created.", clothesName, responseRoomId);
         return clothesRepository.save(clothes);
     }
@@ -69,6 +71,13 @@ public class ClothesServiceImpl implements ClothesService {
         liveblocksService.deleteRoom(roomId);
         clothesRepository.deleteByClothesName(clothesName);
         log.info("Clothes Name: {}, Room id: {} deleted.", clothesName, roomId);
+    }
+
+    @Override
+    public Clothes changeClothesName(String oldClothesName, String newClothesName) {
+        Clothes clothes = clothesRepository.changeClothesName(oldClothesName, newClothesName);
+        log.info("Clothes: {} name changed to {}.", oldClothesName, newClothesName);
+        return clothes;
     }
 
     @Override
