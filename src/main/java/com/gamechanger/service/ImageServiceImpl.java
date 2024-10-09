@@ -5,9 +5,11 @@ import com.gamechanger.domain.Clothes;
 import com.gamechanger.domain.Image;
 import com.gamechanger.dto.ai.image.CreateImageRequestByPromptToAi;
 import com.gamechanger.repository.ImageRepository;
+import com.gamechanger.util.CustomMultipartFile;
 import com.gamechanger.util.FileUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -32,7 +34,8 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public Image removeImageBackground(Clothes clothes, String fileUrl) {
         byte[] downloadFile = fileService.downloadFile(fileUrl);
-        byte[] responseImage = aiClient.removeImageBackground(downloadFile);
+        MultipartFile multipartFile = new CustomMultipartFile(downloadFile, FileUtils.getFileNameFromUrl(fileUrl));
+        byte[] responseImage = aiClient.removeImageBackground(multipartFile);
         Image uploadImage = this.uploadImage(responseImage, "front");
         uploadImage.setClothes(clothes);
         return imageRepository.save(uploadImage);
