@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RemoveBackgroundRequestDto {
+public class RemoveBackgroundRequest {
     private String clothesName;
     private String imageId;
     private String imageUrl;

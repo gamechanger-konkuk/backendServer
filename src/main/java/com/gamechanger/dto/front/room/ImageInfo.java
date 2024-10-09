@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ImageInfoDto {
+public class ImageInfo {
     private String fileName;
     private String fileUrl;
     private int type;

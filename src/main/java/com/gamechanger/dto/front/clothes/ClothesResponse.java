@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateClothesOutputDto {
+public class ClothesResponse {
     private String roomId;
     private String clothesName;
     private String createdAt;

@@ -42,4 +42,4 @@ bin/
 .DS_Store
 
 application-aws.yml
-application-cridentials.yml
+application-credentials.yml
