@@ -24,4 +24,4 @@ spring:
         show_sql: true
         format_sql: true
   config:
-    import: optional:classpath:application-cridentials.yml
+    import: optional:classpath:application-credentials.yml
