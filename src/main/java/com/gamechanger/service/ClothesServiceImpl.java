@@ -7,7 +7,9 @@ import com.gamechanger.util.FileUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -85,20 +87,40 @@ public class ClothesServiceImpl implements ClothesService {
     }
 
     @Override
+    public Image uploadUserImage(MultipartFile uploadImage, String clothesName) throws IOException {
+        Optional<Clothes> findClothes = clothesRepository.findByClothesName(clothesName);
+        if (findClothes.isPresent()) {
+            Clothes clothes = findClothes.get();
+            Image uploadedImage = imageService.uploadImage(uploadImage.getBytes(), "front");
+            clothes.addImageFile(uploadedImage);
+            return uploadedImage;
+        }
+        return null;
+    }
+
+    @Override
     public Image createAiImageByPrompt(String clothesName, String style, String prompt) {
         log.info("Clothes: {}, Image Style: {}, Prompt: {} received.", clothesName, style, prompt);
-        Clothes clothes = clothesRepository.findByClothesName(clothesName).get();
-        Image aiImageByPrompt = imageService.createAiImageByPrompt(clothes, style, prompt);
-        clothes.addImageFile(aiImageByPrompt);
-        return aiImageByPrompt;
+        Optional<Clothes> findClothes = clothesRepository.findByClothesName(clothesName);
+        if (findClothes.isPresent()) {
+            Clothes clothes = findClothes.get();
+            Image aiImageByPrompt = imageService.createAiImageByPrompt(clothes, style, prompt);
+            clothes.addImageFile(aiImageByPrompt);
+            return aiImageByPrompt;
+        }
+        return null;
     }
 
     @Override
     public Image removeImageBackground(String clothesName, String fileUrl) {
-        Clothes clothes = clothesRepository.findByClothesName(clothesName).get();
-        Image removedImage = imageService.removeImageBackground(clothes, fileUrl);
-        log.info("Clothes: {}, File: {} remove background.", clothesName, FileUtils.getFileNameFromUrl(fileUrl));
-        clothes.addImageFile(removedImage);
-        return removedImage;
+        Optional<Clothes> findClothes = clothesRepository.findByClothesName(clothesName);
+        if (findClothes.isPresent()) {
+            Clothes clothes = findClothes.get();
+            Image removedImage = imageService.removeImageBackground(clothes, fileUrl);
+            log.info("Clothes: {}, File: {} remove background.", clothesName, FileUtils.getFileNameFromUrl(fileUrl));
+            clothes.addImageFile(removedImage);
+            return removedImage;
+        }
+        return null;
     }
 }

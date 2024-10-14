@@ -1,10 +1,7 @@
 package com.gamechanger.config;
 
-import com.gamechanger.client.LiveblocksClient;
-import com.gamechanger.service.LiveblocksService;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
