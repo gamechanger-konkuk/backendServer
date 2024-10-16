@@ -49,6 +49,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByLoginId(loginId).orElse(null);
     }
 
+    @Override
     public boolean checkLoginIdDuplicate(String loginId) {
         return userRepository.existsByLoginId(loginId);
     }

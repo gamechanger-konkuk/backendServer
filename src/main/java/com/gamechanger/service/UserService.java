@@ -9,4 +9,5 @@ public interface UserService {
     User join(JoinRequest joinRequest);
     String login(LoginRequest loginRequest);
     User getUserByLoginId(String loginId);
+    boolean checkLoginIdDuplicate(String loginId);
 }

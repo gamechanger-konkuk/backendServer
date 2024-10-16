@@ -10,10 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @Slf4j
@@ -24,14 +21,24 @@ public class UserController {
 
     private final UserService userService;
 
+    @GetMapping("/join/id-check")
+    public ResponseEntity<String> checkIdDuplicate(@RequestBody String loginId) {
+        // 아이디 중복 확인 버튼을 위한 별개의 api
+        // 중복 확인을 했는지 여부는 프론트에서 확인?
+        if (userService.checkLoginIdDuplicate(loginId)) {
+            return ResponseEntity.status(409).body("해당 아이디가 이미 존재합니다.");
+        }
+        return ResponseEntity.ok("사용 가능한 아이디입니다.");
+    }
+
     @PostMapping("/join")
-    public ResponseEntity<JoinResponse> join(@Valid @RequestBody JoinRequest joinRequest) {
+    public ResponseEntity<?> join(@Valid @RequestBody JoinRequest joinRequest) {
         if (!joinRequest.getPassword().equals(joinRequest.getPasswordCheck())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호가 동일하지 않습니다.");
+            return ResponseEntity.badRequest().body("비밀번호가 동일하지 않습니다.");
         }
         User joinedUser = userService.join(joinRequest);
         if (joinedUser == null) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "아이디가 이미 존재합니다.");
+            return ResponseEntity.status(409).body("해당 아이디가 이미 존재합니다.");
         }
         JoinResponse response = JoinResponse.builder()
                 .loginId(joinedUser.getLoginId())
