@@ -45,4 +45,7 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private List<Clothes> clothesList = new ArrayList<>();
 
+    public String getRoleKey() {
+        return this.role.getKey();
+    }
 }
