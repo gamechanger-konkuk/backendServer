@@ -26,6 +26,9 @@ public class UserController {
 
     @PostMapping("/join")
     public ResponseEntity<JoinResponse> join(@Valid @RequestBody JoinRequest joinRequest) {
+        if (!joinRequest.getPassword().equals(joinRequest.getPasswordCheck())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호가 동일하지 않습니다.");
+        }
         User joinedUser = userService.join(joinRequest);
         if (joinedUser == null) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "아이디가 이미 존재합니다.");
