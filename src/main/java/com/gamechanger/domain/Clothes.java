@@ -15,7 +15,6 @@ import java.util.List;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -41,8 +40,10 @@ public class Clothes {
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
-//    @ManyToOne
-//    private User user;
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "user_name")
+    private User user;
 
     @OneToMany(mappedBy = "clothes", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private List<Image> imageFileList = new ArrayList<>();
@@ -53,15 +54,15 @@ public class Clothes {
 
     @Override
     public String toString() {
-        String str = "Clothes{" +
+        StringBuilder str = new StringBuilder("Clothes{" +
                 "clothesName='" + clothesName + '\'' +
-//                ", userName='" + user.getUserName() + '\'' +
+                ", userLoginId='" + user.getLoginId() + '\'' +
                 ", shape='" + shape + '\'' +
                 ", background='" + background + '\'' +
-                ", fileList.size()='" + imageFileList.size() + '\'';
+                ", fileList.size()='" + imageFileList.size() + '\'');
         for (int i = 0; i < imageFileList.size(); i++) {
-            str += ", image " + i + "= " + imageFileList.get(i).toString();
+            str.append(", image ").append(i).append("= ").append(imageFileList.get(i).toString());
         }
-        return str;
+        return str.toString();
     }
 }

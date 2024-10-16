@@ -3,7 +3,6 @@ package com.gamechanger.dto.front.image;
 import lombok.*;
 
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
