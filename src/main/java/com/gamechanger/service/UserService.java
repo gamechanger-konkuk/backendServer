@@ -1,6 +1,12 @@
 package com.gamechanger.service;
 
-//public interface UserService {
-//    User register(JoinRequestDto joinRequestDto);
-//    User findByUserName(String userName);
-//}
+import com.gamechanger.domain.User;
+import com.gamechanger.dto.user.JoinRequest;
+import com.gamechanger.dto.user.LoginRequest;
+
+public interface UserService {
+    // User
+    User join(JoinRequest joinRequest);
+    String login(LoginRequest loginRequest);
+    User getUserByLoginId(String loginId);
+}
