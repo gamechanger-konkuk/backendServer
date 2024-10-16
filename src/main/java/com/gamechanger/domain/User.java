@@ -10,34 +10,36 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "user")
 public class User {
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
     private Long systemUserId;
 
     @Column(unique = true)
-    @NotNull
-    private String email;
+    @NotNull(message = "아이디를 입력해야 합니다.")
+    private String loginId;
 
     @JsonIgnore
-    @Column(length = 16)
-    @NotNull
-    private String password;
+    @NotNull(message = "비밀번호를 입력해야 합니다.")
+    private String password;    // 암호화되어 저장
 
     @Column(length = 30)
-    @NotNull
-    private String userRealName;
+    @NotNull(message = "이름을 입력해야 합니다.")
+    private String name;
 
-//    @Column(length = 20)
-//    @NotNull
-//    private String phoneNumber;
+    private String picture;
+
+    private String provider;
+
+    private String provideId;
 
     @Enumerated(EnumType.STRING)
+    @NotNull
     private UserRole role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
