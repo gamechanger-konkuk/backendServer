@@ -1,12 +1,11 @@
 package com.gamechanger.dto.user;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Getter
-@RequiredArgsConstructor
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class JoinResponse {
     private String loginId;
     private String name;
