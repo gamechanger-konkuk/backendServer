@@ -16,7 +16,7 @@ AWS S3의 접근 권한이 있는 키를 발급해야 합니다. access key와 s
 
 Liveblocks API에 프로젝트를 생성하고, 해당 프로젝트의 secret key를 발급해야 합니다.
 
-mysql의 ID/PW, S3의 키, Liveblocks의 키는 src/main/resources/application-cridentials.yml에 작성되어야 합니다.
+mysql의 ID/PW, S3의 키, Liveblocks의 키는 src/main/resources/application-credentials.yml에 작성되어야 합니다.
 
 ![image](https://github.com/user-attachments/assets/001a369b-977e-4986-8e2d-c9ccf329b6a3)
 
@@ -43,6 +43,14 @@ gradlew bootRun
 
 ## api 목록
 
+### User
+
+- POST /user/join : 회원가입
+- POST /user/join/id-check : 아이디 중복 확인
+- POST /user/login : 로그인
+
+**이하 API들은 헤더에 로그인을 통해 발급된 jwt 토큰이 있어야 합니다.**
+
 ### Clothes
 
 - POST /clothes/create : 티셔츠 생성
@@ -53,7 +61,7 @@ gradlew bootRun
 
 ### Image
 
-- POST /clothes/image/generate : 프롬프트를 이용한 이미지 생성
-- POST /clothes/image/remove-background : 이미지 배경 제거
+- POST /image/generate : 프롬프트를 이용한 이미지 생성
+- POST /image/remove-background : 이미지 배경 제거
 
 
