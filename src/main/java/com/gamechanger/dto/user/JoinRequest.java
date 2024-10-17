@@ -18,14 +18,14 @@ public class JoinRequest {
     private String passwordCheck;
 
     @NotNull(message = "이름을 입력해주세요.")
-    private String name;
+    private String userName;
 
     // 비밀번호 암호화 X
     public User toEntity() {
         return User.builder()
                 .loginId(this.loginId)
                 .password(this.password)
-                .name(this.name)
+                .userName(this.userName)
                 .provider("JWT")
                 .role(UserRole.USER)
                 .build();
@@ -36,7 +36,7 @@ public class JoinRequest {
         return User.builder()
                 .loginId(this.loginId)
                 .password(encodedPassword)
-                .name(this.name)
+                .userName(this.userName)
                 .provider("JWT")
                 .role(UserRole.USER)
                 .build();

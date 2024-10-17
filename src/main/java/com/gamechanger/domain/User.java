@@ -5,8 +5,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 @Getter
@@ -30,7 +30,7 @@ public class User {
 
     @Column(length = 30)
     @NotNull(message = "이름을 입력해야 합니다.")
-    private String name;
+    private String userName;
 
     private String picture;
 
@@ -43,7 +43,12 @@ public class User {
     private UserRole role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-    private List<Clothes> clothesList = new ArrayList<>();
+    @MapKey(name = "clothesName")
+    private Map<String, Clothes> clothesList = new HashMap<>();
+
+    public Clothes getClothesByClothesName(String clothesName) {
+        return clothesList.get(clothesName);
+    }
 
     public String getRoleKey() {
         return this.role.getKey();

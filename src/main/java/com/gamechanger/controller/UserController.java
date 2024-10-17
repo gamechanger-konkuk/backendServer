@@ -42,7 +42,7 @@ public class UserController {
         }
         JoinResponse response = JoinResponse.builder()
                 .loginId(joinedUser.getLoginId())
-                .name(joinedUser.getName())
+                .name(joinedUser.getUserName())
                 .provider(joinedUser.getProvider())
                 .role(joinedUser.getRoleKey())
                 .build();

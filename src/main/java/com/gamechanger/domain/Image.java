@@ -29,7 +29,7 @@ public class Image {
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "clothes_name")
+    @JoinColumn(name = "system_clothes_id")
     private Clothes clothes;
 
     @Override
