@@ -9,8 +9,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -42,14 +42,15 @@ public class Clothes {
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "user_name")
+    @JoinColumn(name = "login_id")
     private User user;
 
     @OneToMany(mappedBy = "clothes", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-    private List<Image> imageFileList = new ArrayList<>();
+    @MapKey(name = "fileName")
+    private Map<String, Image> imageFileList = new HashMap<>();
 
     public void addImageFile(Image image) {
-        imageFileList.add(image);
+        imageFileList.put(image.getFileName(), image);
     }
 
     @Override
