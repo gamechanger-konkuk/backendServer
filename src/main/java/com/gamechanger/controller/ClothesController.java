@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import static com.gamechanger.util.jwt.JwtUtils.getCurrentLoginId;
@@ -45,7 +47,8 @@ public class ClothesController {
                 .createdAt(clothes.getCreatedAt().toString())
                 .modifiedAt(clothes.getModifiedAt().toString())
                 .build();
-        return ResponseEntity.created(URI.create("/clothes/name/" + clothesName))
+                String encodedClothesName = URLEncoder.encode(clothesName, StandardCharsets.UTF_8);
+	return ResponseEntity.created(URI.create("/clothes/name/" + encodedClothesName))
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(response);
     }
