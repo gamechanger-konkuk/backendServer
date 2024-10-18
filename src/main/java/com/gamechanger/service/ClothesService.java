@@ -2,6 +2,7 @@ package com.gamechanger.service;
 
 import com.gamechanger.domain.Clothes;
 import com.gamechanger.domain.Image;
+import com.gamechanger.domain.User;
 import org.json.simple.parser.ParseException;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -10,15 +11,15 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ClothesService {
-    // clothes
-    Clothes createClothes(String clothesName) throws ParseException;
-    Optional<Clothes> getClothes(String clothesName);
+    // Clothes
+    Clothes createClothes(User user, String clothesName) throws ParseException;
+    Optional<Clothes> getClothes(Long systemClothesId);
     List<Clothes> getAllClothes();
-    Clothes saveClothes(String clothesName);
-    void deleteClothes(String clothesName);
-    Clothes changeClothesName(String oldClothesName, String newClothesName);
-    // image
-    Image uploadUserImage(MultipartFile uploadImage, String clothesName) throws IOException;
-    Image createAiImageByPrompt(String clothesName, String style, String prompt);
-    Image removeImageBackground(String clothesName, String fileUrl);
+    Clothes saveClothes(Long systemClothesId);
+    void deleteClothes(Long systemClothesId);
+    Clothes changeClothesName(Long systemClothesId, String newClothesName);
+    // Image
+    Image uploadUserImage(Long systemClothesId, MultipartFile uploadImage, String clothesName) throws IOException;
+    Image createAiImageByPrompt(Long systemClothesId, String clothesName, String style, String prompt);
+    Image removeImageBackground(Long systemClothesId, String clothesName, String fileUrl);
 }

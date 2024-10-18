@@ -9,10 +9,11 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Optional;
 
 public interface ClothesRepository extends JpaRepository<Clothes, String> {
+    Optional<Clothes> findBySystemClothesId(Long systemClothesId);
     Optional<Clothes> findByClothesName(String clothesName);
     @Transactional
-    void deleteByClothesName(String clothesName);
+    void deleteBySystemClothesId(Long systemClothesId);
     @Modifying
-    @Query("UPDATE Clothes c SET c.clothesName = :newClothesName WHERE c.clothesName = :oldClothesName")
-    void changeClothesName(String oldClothesName, String newClothesName);
+    @Query("UPDATE Clothes c SET c.clothesName = :newClothesName WHERE c.systemClothesId = :systemClothesId")
+    void changeClothesName(Long systemClothesId, String newClothesName);
 }

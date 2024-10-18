@@ -1,39 +1,56 @@
-//package com.gamechanger.domain;
-//
-//import com.fasterxml.jackson.annotation.JsonIgnore;
-//import jakarta.persistence.*;
-//import lombok.*;
-//
-//import java.util.ArrayList;
-//import java.util.List;
-//
-////@Entity
-//@Getter
-//@Setter
-//@Builder
-//@NoArgsConstructor
-//@AllArgsConstructor
-//@Table(name = "user")
-//public class User {
-//    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long systemUserId;
-//
-//    @Column(unique = true, length = 10)
-//    private String userId;
-//
-//    @JsonIgnore
-//    private String password;
-//    private String userName;
-//
-//    @Column(unique = true, length = 15)
-//    private String nickname;
-//    private String address;
-//    private int phoneNumber;
-//    private String email;
-//    private UserRole role;
-//
-////    @OneToMany(mappedBy = "user")
-//    @OneToMany
-//    private List<Clothes> clothesList = new ArrayList<>();
-//
-//}
+package com.gamechanger.domain;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@Entity
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "user")
+public class User {
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
+    private Long systemUserId;
+
+    @Column(unique = true)
+    @NotNull(message = "아이디를 입력해야 합니다.")
+    private String loginId;
+
+    @JsonIgnore
+    @NotNull(message = "비밀번호를 입력해야 합니다.")
+    private String password;    // 암호화되어 저장
+
+    @Column(length = 30)
+    @NotNull(message = "이름을 입력해야 합니다.")
+    private String userName;
+
+    private String picture;
+
+    private String provider;
+
+    private String provideId;
+
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    private UserRole role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @MapKey(name = "clothesName")
+    private Map<String, Clothes> clothesList = new HashMap<>();
+
+    public Clothes getClothesByClothesName(String clothesName) {
+        return clothesList.get(clothesName);
+    }
+
+    public String getRoleKey() {
+        return this.role.getKey();
+    }
+}

@@ -2,18 +2,15 @@ package com.gamechanger.service;
 
 import com.gamechanger.domain.Clothes;
 import com.gamechanger.domain.Image;
+import com.gamechanger.domain.User;
 import com.gamechanger.repository.ClothesRepository;
-import com.gamechanger.util.FileUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -24,13 +21,14 @@ public class ClothesServiceImpl implements ClothesService {
     private final LiveblocksService liveblocksService;
 
     @Override
-    public Clothes createClothes(String clothesName) throws ParseException {
+    public Clothes createClothes(User user, String clothesName) throws ParseException {
         Clothes clothes = Clothes.builder()
                 .clothesName(clothesName)
                 .roomId(String.valueOf(UUID.randomUUID()))
                 .background("white")
                 .shape("half")
-                .imageFileList(new ArrayList<>())
+                .imageFileList(new HashMap<>())
+                .user(user)
                 .build();
         String[] defaultAccesses = {"room:write"};
         String responseRoomId = liveblocksService.createRoom(clothes.getRoomId(), defaultAccesses);
@@ -41,8 +39,8 @@ public class ClothesServiceImpl implements ClothesService {
     }
 
     @Override
-    public Optional<Clothes> getClothes(String clothesName) {
-        return clothesRepository.findByClothesName(clothesName);
+    public Optional<Clothes> getClothes(Long systemClothesId) {
+        return clothesRepository.findBySystemClothesId(systemClothesId);
     }
 
     @Override
@@ -51,76 +49,60 @@ public class ClothesServiceImpl implements ClothesService {
     }
 
     @Override
-    public Clothes saveClothes(String clothesName) {
-        Clothes clothes = clothesRepository.findByClothesName(clothesName).get();
+    public Clothes saveClothes(Long systemClothesId) {
+        Optional<Clothes> optionalClothes = clothesRepository.findBySystemClothesId(systemClothesId);
+        if (optionalClothes.isEmpty()) {
+            return null;
+        }
+        Clothes clothes = optionalClothes.get();
         // 해당 티셔츠의 룸 getStorage하고
         String updatedStorage = liveblocksService.getStorage(clothes.getRoomId());
         // 가져온 내용으로 위의 clothes 내용 업데이트하기
 
         // 이후 레포에 해당 clothes 저장
-        Clothes saveClothes = clothesRepository.save(clothes);
-        log.info("Clothes Name: {} saved.", clothes.getClothesName());
-        return saveClothes;
+        return clothesRepository.save(clothes);
     }
 
     @Override
-    public void deleteClothes(String clothesName) {
-        Clothes clothes = clothesRepository.findByClothesName(clothesName).get();
-        for (Image image : clothes.getImageFileList()) {
+    public void deleteClothes(Long systemClothesId) {
+        Clothes clothes = clothesRepository.findBySystemClothesId(systemClothesId).get();
+        for (Image image : clothes.getImageFileList().values()) {
             imageService.deleteImage(image.getFileName());
         }
         String roomId = clothes.getRoomId();
         liveblocksService.deleteRoom(roomId);
-        clothesRepository.deleteByClothesName(clothesName);
-        log.info("Clothes Name: {}, Room id: {} deleted.", clothesName, roomId);
+        clothesRepository.deleteBySystemClothesId(systemClothesId);
+        log.info("Clothes Name: {}, Room id: {} deleted.", clothes.getClothesName(), roomId);
     }
 
     @Override
-    public Clothes changeClothesName(String oldClothesName, String newClothesName) {
-        clothesRepository.changeClothesName(oldClothesName, newClothesName);
+    public Clothes changeClothesName(Long systemClothesId, String newClothesName) {
+        clothesRepository.changeClothesName(systemClothesId, newClothesName);
         Optional<Clothes> changedClothes = clothesRepository.findByClothesName(newClothesName);
-        if (changedClothes.isPresent()) {
-            log.info("Clothes: {} name changed to {}.", oldClothesName, newClothesName);
-            return changedClothes.get();
-        }
-        return null;
+        return changedClothes.orElse(null);
     }
 
     @Override
-    public Image uploadUserImage(MultipartFile uploadImage, String clothesName) throws IOException {
-        Optional<Clothes> findClothes = clothesRepository.findByClothesName(clothesName);
-        if (findClothes.isPresent()) {
-            Clothes clothes = findClothes.get();
-            Image uploadedImage = imageService.uploadImage(uploadImage.getBytes(), "front");
-            clothes.addImageFile(uploadedImage);
-            return uploadedImage;
-        }
-        return null;
+    public Image uploadUserImage(Long systemClothesId, MultipartFile uploadImage, String clothesName) throws IOException {
+        Clothes clothes = clothesRepository.findBySystemClothesId(systemClothesId).get();
+        Image uploadedImage = imageService.uploadImage(uploadImage.getBytes(), "front");
+        clothes.addImageFile(uploadedImage);
+        return uploadedImage;
     }
 
     @Override
-    public Image createAiImageByPrompt(String clothesName, String style, String prompt) {
-        log.info("Clothes: {}, Image Style: {}, Prompt: {} received.", clothesName, style, prompt);
-        Optional<Clothes> findClothes = clothesRepository.findByClothesName(clothesName);
-        if (findClothes.isPresent()) {
-            Clothes clothes = findClothes.get();
-            Image aiImageByPrompt = imageService.createAiImageByPrompt(clothes, style, prompt);
-            clothes.addImageFile(aiImageByPrompt);
-            return aiImageByPrompt;
-        }
-        return null;
+    public Image createAiImageByPrompt(Long systemClothesId, String clothesName, String style, String prompt) {
+        Clothes clothes = clothesRepository.findBySystemClothesId(systemClothesId).get();
+        Image aiImageByPrompt = imageService.createAiImageByPrompt(clothes, style, prompt);
+        clothes.addImageFile(aiImageByPrompt);
+        return aiImageByPrompt;
     }
 
     @Override
-    public Image removeImageBackground(String clothesName, String fileUrl) {
-        Optional<Clothes> findClothes = clothesRepository.findByClothesName(clothesName);
-        if (findClothes.isPresent()) {
-            Clothes clothes = findClothes.get();
-            Image removedImage = imageService.removeImageBackground(clothes, fileUrl);
-            log.info("Clothes: {}, File: {} remove background.", clothesName, FileUtils.getFileNameFromUrl(fileUrl));
-            clothes.addImageFile(removedImage);
-            return removedImage;
-        }
-        return null;
+    public Image removeImageBackground(Long systemClothesId, String clothesName, String fileUrl) {
+        Clothes clothes = clothesRepository.findBySystemClothesId(systemClothesId).get();
+        Image removedImage = imageService.removeImageBackground(clothes, fileUrl);
+        clothes.addImageFile(removedImage);
+        return removedImage;
     }
 }
