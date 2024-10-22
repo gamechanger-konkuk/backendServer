@@ -1,4 +1,4 @@
-package com.gamechanger.service;
+package com.gamechanger.service.user;
 
 import com.gamechanger.domain.Clothes;
 import com.gamechanger.domain.Image;
@@ -6,6 +6,7 @@ import com.gamechanger.domain.User;
 import com.gamechanger.dto.user.JoinRequest;
 import com.gamechanger.dto.user.LoginRequest;
 import com.gamechanger.repository.UserRepository;
+import com.gamechanger.service.clothes.ClothesService;
 import com.gamechanger.util.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

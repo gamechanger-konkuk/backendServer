@@ -1,7 +1,7 @@
-package com.gamechanger.config;
+package com.gamechanger.config.image;
 
-import com.gamechanger.service.AwsS3FileServiceImpl;
-import com.gamechanger.service.FileService;
+import com.gamechanger.service.image.AwsS3FileServiceImpl;
+import com.gamechanger.service.image.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

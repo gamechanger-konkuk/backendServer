@@ -1,10 +1,10 @@
-package com.gamechanger.config;
+package com.gamechanger.config.user;
 
 import com.gamechanger.repository.UserRepository;
-import com.gamechanger.service.ClothesService;
-import com.gamechanger.service.UserDetailsServiceImpl;
-import com.gamechanger.service.UserService;
-import com.gamechanger.service.UserServiceImpl;
+import com.gamechanger.service.clothes.ClothesService;
+import com.gamechanger.service.user.UserDetailsServiceImpl;
+import com.gamechanger.service.user.UserService;
+import com.gamechanger.service.user.UserServiceImpl;
 import com.gamechanger.util.jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

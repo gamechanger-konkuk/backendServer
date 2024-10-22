@@ -1,4 +1,4 @@
-package com.gamechanger.service;
+package com.gamechanger.service.image;
 
 import com.gamechanger.client.AiClient;
 import com.gamechanger.domain.Clothes;

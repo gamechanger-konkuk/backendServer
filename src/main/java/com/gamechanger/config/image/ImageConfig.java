@@ -1,10 +1,10 @@
-package com.gamechanger.config;
+package com.gamechanger.config.image;
 
 import com.gamechanger.client.AiClient;
 import com.gamechanger.repository.ImageRepository;
-import com.gamechanger.service.FileService;
-import com.gamechanger.service.ImageService;
-import com.gamechanger.service.ImageServiceImpl;
+import com.gamechanger.service.image.FileService;
+import com.gamechanger.service.image.ImageService;
+import com.gamechanger.service.image.ImageServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

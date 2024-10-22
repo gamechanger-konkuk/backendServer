@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 public class JoinResponse {
     private String loginId;
-    private String name;
+    private String userName;
     private String provider;
     private String role;
 }

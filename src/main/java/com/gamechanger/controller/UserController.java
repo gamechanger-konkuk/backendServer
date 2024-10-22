@@ -5,7 +5,7 @@ import com.gamechanger.dto.user.JoinIdCheckRequest;
 import com.gamechanger.dto.user.JoinRequest;
 import com.gamechanger.dto.user.JoinResponse;
 import com.gamechanger.dto.user.LoginRequest;
-import com.gamechanger.service.UserService;
+import com.gamechanger.service.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,7 +43,7 @@ public class UserController {
         }
         JoinResponse response = JoinResponse.builder()
                 .loginId(joinedUser.getLoginId())
-                .name(joinedUser.getUserName())
+                .userName(joinedUser.getUserName())
                 .provider(joinedUser.getProvider())
                 .role(joinedUser.getRoleKey())
                 .build();

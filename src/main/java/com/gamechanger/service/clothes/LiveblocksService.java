@@ -1,4 +1,4 @@
-package com.gamechanger.service;
+package com.gamechanger.service.clothes;
 
 import com.gamechanger.client.LiveblocksClient;
 import com.gamechanger.dto.front.room.GetImageInfoFromRoom;
