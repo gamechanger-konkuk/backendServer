@@ -1,9 +1,10 @@
-package com.gamechanger.service;
+package com.gamechanger.service.clothes;
 
 import com.gamechanger.domain.Clothes;
 import com.gamechanger.domain.Image;
 import com.gamechanger.domain.User;
 import com.gamechanger.repository.ClothesRepository;
+import com.gamechanger.service.image.ImageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;

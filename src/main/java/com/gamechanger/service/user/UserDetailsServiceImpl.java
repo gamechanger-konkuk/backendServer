@@ -1,4 +1,4 @@
-package com.gamechanger.service;
+package com.gamechanger.service.user;
 
 import com.gamechanger.domain.User;
 import com.gamechanger.repository.UserRepository;

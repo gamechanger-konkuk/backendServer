@@ -4,7 +4,7 @@ import com.gamechanger.domain.Clothes;
 import com.gamechanger.dto.front.clothes.ChangeClothesNameRequest;
 import com.gamechanger.dto.front.clothes.CreateClothesRequest;
 import com.gamechanger.dto.front.clothes.ClothesResponse;
-import com.gamechanger.service.UserService;
+import com.gamechanger.service.user.UserService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

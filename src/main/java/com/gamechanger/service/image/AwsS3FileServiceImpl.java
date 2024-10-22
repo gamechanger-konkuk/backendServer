@@ -1,4 +1,4 @@
-package com.gamechanger.service;
+package com.gamechanger.service.image;
 
 import com.gamechanger.util.FileUtils;
 import lombok.RequiredArgsConstructor;

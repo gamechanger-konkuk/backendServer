@@ -1,6 +1,6 @@
 package com.gamechanger.client;
 
-import com.gamechanger.config.LiveblocksConfig;
+import com.gamechanger.config.clothes.LiveblocksConfig;
 import com.gamechanger.dto.front.room.GetImageInfoFromRoom;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;

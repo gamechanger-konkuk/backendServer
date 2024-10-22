@@ -1,4 +1,4 @@
-package com.gamechanger.service;
+package com.gamechanger.service.image;
 
 public interface FileService {
     String uploadFile(byte[] image);

@@ -1,4 +1,4 @@
-package com.gamechanger.config;
+package com.gamechanger.config.user;
 
 import com.gamechanger.util.jwt.JwtAuthenticationFilter;
 import com.gamechanger.util.jwt.JwtTokenProvider;

@@ -1,4 +1,4 @@
-package com.gamechanger.config;
+package com.gamechanger.config.clothes;
 
 import feign.RequestInterceptor;
 import feign.RequestTemplate;

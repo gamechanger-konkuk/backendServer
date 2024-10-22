@@ -1,4 +1,4 @@
-package com.gamechanger.service;
+package com.gamechanger.service.image;
 
 import com.gamechanger.domain.Clothes;
 import com.gamechanger.domain.Image;
