@@ -26,7 +26,7 @@ public class ImageServiceImpl implements ImageService {
                 .text_prompt(prompt)
                 .build();
         byte[] responseImage = aiClient.generateImageByPrompt(request);
-        Image uploadImage = this.uploadImage(responseImage, "front");
+        Image uploadImage = this.uploadImage(clothes, responseImage, "front");
         uploadImage.setClothes(clothes);
         return imageRepository.save(uploadImage);
     }
@@ -36,13 +36,13 @@ public class ImageServiceImpl implements ImageService {
         byte[] downloadFile = fileService.downloadFile(fileUrl);
         MultipartFile multipartFile = new CustomMultipartFile(downloadFile, FileUtils.getFileNameFromUrl(fileUrl));
         byte[] responseImage = aiClient.removeImageBackground(multipartFile);
-        Image uploadImage = this.uploadImage(responseImage, "front");
+        Image uploadImage = this.uploadImage(clothes, responseImage, "front");
         uploadImage.setClothes(clothes);
         return imageRepository.save(uploadImage);
     }
 
     @Override
-    public Image uploadImage(byte[] image, String view) {
+    public Image uploadImage(Clothes clothes, byte[] image, String view) {
         String fileUrl = fileService.uploadFile(image);
         return imageRepository.save(Image.builder()
                 .fileName(FileUtils.getFileNameFromUrl(fileUrl))
@@ -50,6 +50,7 @@ public class ImageServiceImpl implements ImageService {
                 .view(view)
                 .locationX(0.0f)    // 기본값. 중앙으로 설정하기. 프론트에서 전달해야 한다면 인자로 전달받기
                 .locationY(0.0f)
+                .clothes(clothes)
                 .build());
     }
 
