@@ -86,7 +86,7 @@ public class ClothesServiceImpl implements ClothesService {
     @Override
     public Image uploadUserImage(Long systemClothesId, MultipartFile uploadImage, String clothesName) throws IOException {
         Clothes clothes = clothesRepository.findBySystemClothesId(systemClothesId).get();
-        Image uploadedImage = imageService.uploadImage(uploadImage.getBytes(), "front");
+        Image uploadedImage = imageService.uploadImage(clothes, uploadImage.getBytes(), "front");
         clothes.addImageFile(uploadedImage);
         return uploadedImage;
     }

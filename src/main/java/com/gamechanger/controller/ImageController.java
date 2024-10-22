@@ -4,7 +4,6 @@ import com.gamechanger.domain.Image;
 import com.gamechanger.dto.front.image.CreateImageRequestByPrompt;
 import com.gamechanger.dto.front.image.FileResponse;
 import com.gamechanger.dto.front.image.RemoveBackgroundRequest;
-import com.gamechanger.dto.front.image.UploadUserImageRequest;
 import com.gamechanger.service.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
@@ -26,17 +26,17 @@ public class ImageController {
     private final UserService userService;
 
     @PostMapping("/upload")
-    public ResponseEntity<FileResponse> uploadUserImage(@Valid @RequestBody UploadUserImageRequest uploadUserImageRequest) throws IOException {
+    public ResponseEntity<FileResponse> uploadUserImage(@RequestParam("clothesName") String clothesName, @RequestParam("imageId") String imageId, @RequestParam("uploadImage") MultipartFile uploadImage) throws IOException {
         String loginId = getCurrentLoginId();
-        Image uploadedImage = userService.uploadUserImage(loginId, uploadUserImageRequest.getUploadImage(), uploadUserImageRequest.getClothesName());
-        log.info("사용자 {}의 티셔츠 {}에 이미지 {}가 추가되었습니다.", loginId, uploadUserImageRequest.getClothesName(), uploadedImage.getFileName());
+        Image uploadedImage = userService.uploadUserImage(loginId, uploadImage, clothesName);
+        log.info("사용자 {}의 티셔츠 {}에 이미지 {}가 추가되었습니다.", loginId, clothesName, uploadedImage.getFileName());
         FileResponse response = FileResponse.builder()
-                .imageId(uploadUserImageRequest.getImageId())
+                .imageId(imageId)
                 .roomId(uploadedImage.getClothes().getRoomId())
                 .imageUrl(uploadedImage.getFileUrl())
                 .build();
         return ResponseEntity.ok()
-                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(response);
     }
 
