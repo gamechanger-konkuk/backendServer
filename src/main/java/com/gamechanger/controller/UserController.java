@@ -1,6 +1,7 @@
 package com.gamechanger.controller;
 
 import com.gamechanger.domain.User;
+import com.gamechanger.dto.user.JoinIdCheckRequest;
 import com.gamechanger.dto.user.JoinRequest;
 import com.gamechanger.dto.user.JoinResponse;
 import com.gamechanger.dto.user.LoginRequest;
@@ -22,10 +23,10 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/join/id-check")
-    public ResponseEntity<String> checkIdDuplicate(@RequestBody String loginId) {
+    public ResponseEntity<String> checkIdDuplicate(@RequestBody JoinIdCheckRequest joinIdCheckRequest) {
         // 아이디 중복 확인 버튼을 위한 별개의 api
         // 중복 확인을 했는지 여부는 프론트에서 확인?
-        if (userService.checkLoginIdDuplicate(loginId)) {
+        if (userService.checkLoginIdDuplicate(joinIdCheckRequest.getLoginId())) {
             return ResponseEntity.status(409).body("해당 아이디가 이미 존재합니다.");
         }
         return ResponseEntity.ok("사용 가능한 아이디입니다.");
