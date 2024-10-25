@@ -22,7 +22,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/join/id-check")
+    @PostMapping("/join/id-check")
     public ResponseEntity<String> checkIdDuplicate(@RequestBody JoinIdCheckRequest joinIdCheckRequest) {
         // 아이디 중복 확인 버튼을 위한 별개의 api
         // 중복 확인을 했는지 여부는 프론트에서 확인?
