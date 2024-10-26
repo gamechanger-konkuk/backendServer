@@ -6,7 +6,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class JoinResponse {
+public class UserResponse {
     private String loginId;
     private String userName;
     private String provider;
