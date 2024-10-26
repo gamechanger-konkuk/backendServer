@@ -5,6 +5,7 @@ import com.gamechanger.domain.Image;
 import com.gamechanger.domain.User;
 import com.gamechanger.dto.user.JoinRequest;
 import com.gamechanger.dto.user.LoginRequest;
+import com.gamechanger.dto.user.LoginResponse;
 import org.json.simple.parser.ParseException;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,7 +15,7 @@ import java.util.List;
 public interface UserService {
     // User
     User join(JoinRequest joinRequest);
-    String login(LoginRequest loginRequest);
+    LoginResponse login(LoginRequest loginRequest);
     User getUserByLoginId(String loginId);
     boolean checkLoginIdDuplicate(String loginId);
     // Clothes

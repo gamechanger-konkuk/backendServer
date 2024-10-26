@@ -1,10 +1,7 @@
 package com.gamechanger.controller;
 
 import com.gamechanger.domain.User;
-import com.gamechanger.dto.user.JoinIdCheckRequest;
-import com.gamechanger.dto.user.JoinRequest;
-import com.gamechanger.dto.user.UserResponse;
-import com.gamechanger.dto.user.LoginRequest;
+import com.gamechanger.dto.user.*;
 import com.gamechanger.service.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -53,12 +50,12 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@Valid @RequestBody LoginRequest loginRequest) {
-        String userJwtToken = userService.login(loginRequest);
-        if (userJwtToken == null) {
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
+        LoginResponse response = userService.login(loginRequest);
+        if (response.getAccessToken() == null) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "아이디 또는 비밀번호가 잘못됐습니다.");
         }
-        return ResponseEntity.ok(userJwtToken);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/info")
