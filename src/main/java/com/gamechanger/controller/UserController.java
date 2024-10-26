@@ -3,7 +3,7 @@ package com.gamechanger.controller;
 import com.gamechanger.domain.User;
 import com.gamechanger.dto.user.JoinIdCheckRequest;
 import com.gamechanger.dto.user.JoinRequest;
-import com.gamechanger.dto.user.JoinResponse;
+import com.gamechanger.dto.user.UserResponse;
 import com.gamechanger.dto.user.LoginRequest;
 import com.gamechanger.service.user.UserService;
 import jakarta.validation.Valid;
@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import static com.gamechanger.util.jwt.JwtUtils.getCurrentLoginId;
 
 @Slf4j
 @RestController
@@ -41,7 +43,7 @@ public class UserController {
         if (joinedUser == null) {
             return ResponseEntity.status(409).body("해당 아이디가 이미 존재합니다.");
         }
-        JoinResponse response = JoinResponse.builder()
+        UserResponse response = UserResponse.builder()
                 .loginId(joinedUser.getLoginId())
                 .userName(joinedUser.getUserName())
                 .provider(joinedUser.getProvider())
@@ -57,5 +59,18 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "아이디 또는 비밀번호가 잘못됐습니다.");
         }
         return ResponseEntity.ok(userJwtToken);
+    }
+
+    @GetMapping("/info")
+    public ResponseEntity<UserResponse> getUserInfo() {
+        String loginId = getCurrentLoginId();
+        User user = userService.getUserByLoginId(loginId);
+        UserResponse response = UserResponse.builder()
+                .loginId(loginId)
+                .userName(user.getUserName())
+                .provider(user.getProvider())
+                .role(user.getRoleKey())
+                .build();
+        return ResponseEntity.ok(response);
     }
 }
