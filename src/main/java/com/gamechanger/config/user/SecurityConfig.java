@@ -28,7 +28,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // jwt를 사용하므로 세션을 사용하지 않음
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/user/join", "/user/login", "/user/join/id-check").permitAll()   // 회원가입, 로그인은 토큰 없이 접근
+                        .requestMatchers("/user/join", "/user/login", "/user/join/id-check", "/healthcheck").permitAll()   // 회원가입, 로그인, 중복확인은 토큰 없이 접근
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
