@@ -5,6 +5,7 @@ import com.gamechanger.domain.Image;
 import com.gamechanger.domain.User;
 import com.gamechanger.dto.user.JoinRequest;
 import com.gamechanger.dto.user.LoginRequest;
+import com.gamechanger.dto.user.LoginResponse;
 import com.gamechanger.repository.UserRepository;
 import com.gamechanger.service.clothes.ClothesService;
 import com.gamechanger.util.jwt.JwtTokenProvider;
@@ -39,7 +40,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String login(LoginRequest loginRequest) {
+    public LoginResponse login(LoginRequest loginRequest) {
         Optional<User> optionalUser = userRepository.findByLoginId(loginRequest.getLoginId());
         // id에 해당하는 유저가 없으면 null 반환
         if (optionalUser.isEmpty()) {
@@ -50,7 +51,13 @@ public class UserServiceImpl implements UserService {
         if (!encoder.matches(loginRequest.getPassword(), user.getPassword())) {
             return null;
         }
-        return jwtTokenProvider.createToken(user.getLoginId(), user.getUserName());
+        return LoginResponse.builder()
+                .loginId(user.getLoginId())
+                .userName(user.getUserName())
+                .provider(user.getProvider())
+                .role(user.getRoleKey())
+                .accessToken(jwtTokenProvider.createToken(user.getLoginId(), user.getUserName()))
+                .build();
     }
 
     @Override
