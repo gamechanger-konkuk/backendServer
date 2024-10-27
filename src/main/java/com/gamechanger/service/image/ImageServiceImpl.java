@@ -33,8 +33,10 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public Image removeImageBackground(Clothes clothes, String fileUrl) {
-        byte[] downloadFile = fileService.downloadFile(fileUrl);
-        MultipartFile multipartFile = new CustomMultipartFile(downloadFile, FileUtils.getFileNameFromUrl(fileUrl));
+        String fileName = FileUtils.getFileNameFromUrl(fileUrl);
+        byte[] downloadFile = fileService.downloadFile(fileName);
+        this.deleteImage(fileName);
+        MultipartFile multipartFile = new CustomMultipartFile(downloadFile, fileName);
         byte[] responseImage = aiClient.removeImageBackground(multipartFile);
         Image uploadImage = this.uploadImage(clothes, responseImage, "front");
         uploadImage.setClothes(clothes);
@@ -72,5 +74,4 @@ public class ImageServiceImpl implements ImageService {
         image.removeImageFromClothes();
         imageRepository.deleteByFileName(fileName);
     }
-
 }
