@@ -53,6 +53,10 @@ public class Clothes {
         imageFileList.put(image.getFileName(), image);
     }
 
+    public void deleteImageFile(String fileName) {
+        imageFileList.remove(fileName);
+    }
+
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder("Clothes{" +

@@ -12,5 +12,5 @@ public interface ImageService {
     Image uploadImage(Clothes clothes, byte[] image, String view);
     Image getImage(String fileUrl);
     Image updateImage(Image Image);
-    void deleteImage(String fileUrl);
+    void deleteImage(String fileName);
 }
