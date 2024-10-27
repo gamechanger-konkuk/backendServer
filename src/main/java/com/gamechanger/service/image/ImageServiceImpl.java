@@ -68,7 +68,9 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public void deleteImage(String fileName) {
         fileService.deleteFile(fileName);
-        imageRepository.deleteById(fileName);
+        Image image = imageRepository.findByFileName(fileName);
+        image.removeImageFromClothes();
+        imageRepository.deleteByFileName(fileName);
     }
 
 }

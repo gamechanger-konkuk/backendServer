@@ -4,7 +4,9 @@ import com.gamechanger.domain.Image;
 import com.gamechanger.dto.front.image.CreateImageRequestByPrompt;
 import com.gamechanger.dto.front.image.FileResponse;
 import com.gamechanger.dto.front.image.RemoveBackgroundRequest;
+import com.gamechanger.service.image.ImageService;
 import com.gamechanger.service.user.UserService;
+import com.gamechanger.util.FileUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +26,7 @@ import static com.gamechanger.util.jwt.JwtUtils.getCurrentLoginId;
 public class ImageController {
 
     private final UserService userService;
+    private final ImageService imageService;
 
     @PostMapping("/upload")
     public ResponseEntity<FileResponse> uploadUserImage(@RequestParam("clothesName") String clothesName, @RequestParam("imageId") String imageId, @RequestParam("uploadImage") MultipartFile uploadImage) throws IOException {
@@ -68,6 +71,13 @@ public class ImageController {
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(response);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteImage(@RequestParam String fileUrl) {
+        String fileName = FileUtils.getFileNameFromUrl(fileUrl);
+        imageService.deleteImage(fileName);
+        return ResponseEntity.noContent().build();
     }
 
 //    @PostMapping("/edit/{fileName}")

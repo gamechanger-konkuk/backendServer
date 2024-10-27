@@ -32,6 +32,11 @@ public class Image {
     @JoinColumn(name = "system_clothes_id")
     private Clothes clothes;
 
+    @PreRemove
+    public void removeImageFromClothes() {
+        clothes.deleteImageFile(this.fileName);
+    }
+
     @Override
     public String toString() {
         return "Image{" +
