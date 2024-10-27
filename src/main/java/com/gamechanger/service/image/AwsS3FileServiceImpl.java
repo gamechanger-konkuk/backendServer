@@ -44,8 +44,7 @@ public class AwsS3FileServiceImpl implements FileService {
     }
 
     @Override
-    public byte[] downloadFile(String fileUrl) {
-        String fileName = FileUtils.getFileNameFromUrl(fileUrl);
+    public byte[] downloadFile(String fileName) {
         GetObjectRequest getObjectRequest = GetObjectRequest.builder()
                 .bucket(bucketName)
                 .key(fileName)
