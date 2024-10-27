@@ -73,7 +73,7 @@ public class ImageController {
                 .body(response);
     }
 
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
     public ResponseEntity<?> deleteImage(@RequestParam String fileUrl) {
         String fileName = FileUtils.getFileNameFromUrl(fileUrl);
         imageService.deleteImage(fileName);
