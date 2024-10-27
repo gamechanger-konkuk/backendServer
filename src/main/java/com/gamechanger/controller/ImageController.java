@@ -2,6 +2,7 @@ package com.gamechanger.controller;
 
 import com.gamechanger.domain.Image;
 import com.gamechanger.dto.front.image.CreateImageRequestByPrompt;
+import com.gamechanger.dto.front.image.DeleteImageRequest;
 import com.gamechanger.dto.front.image.FileResponse;
 import com.gamechanger.dto.front.image.RemoveBackgroundRequest;
 import com.gamechanger.service.image.ImageService;
@@ -74,8 +75,8 @@ public class ImageController {
     }
 
     @PostMapping("/delete")
-    public ResponseEntity<?> deleteImage(@RequestParam String fileUrl) {
-        String fileName = FileUtils.getFileNameFromUrl(fileUrl);
+    public ResponseEntity<?> deleteImage(@RequestBody DeleteImageRequest deleteImageRequest) {
+        String fileName = FileUtils.getFileNameFromUrl(deleteImageRequest.getFileUrl());
         imageService.deleteImage(fileName);
         return ResponseEntity.noContent().build();
     }
