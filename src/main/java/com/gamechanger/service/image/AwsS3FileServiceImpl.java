@@ -1,6 +1,5 @@
 package com.gamechanger.service.image;
 
-import com.gamechanger.util.FileUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +24,7 @@ public class AwsS3FileServiceImpl implements FileService {
         try {
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                     .bucket(bucketName)
-                    .contentType("image/jpeg")
+                    .contentType("image/png")
                     .contentLength((long) image.length)
                     .key(fileName)
                     .build();
@@ -67,6 +66,6 @@ public class AwsS3FileServiceImpl implements FileService {
     }
 
     public String makeRandomFileName() {
-        return UUID.randomUUID() + ".jpeg";
+        return UUID.randomUUID() + ".png";
     }
 }
