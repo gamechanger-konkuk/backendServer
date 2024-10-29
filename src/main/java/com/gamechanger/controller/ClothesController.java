@@ -18,6 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.util.*;
 
+import static com.gamechanger.util.UrlUtils.UrlDecode;
 import static com.gamechanger.util.jwt.JwtUtils.getCurrentLoginId;
 
 @Slf4j
@@ -31,7 +32,7 @@ public class ClothesController {
     @PostMapping("/create")
     public ResponseEntity<?> createClothes(@Valid @RequestBody CreateClothesRequest createClothesRequest) throws ParseException {
         String loginId = getCurrentLoginId();
-        String clothesName = createClothesRequest.getClothesName();
+        String clothesName = UrlDecode(createClothesRequest.getClothesName());
         // 티셔츠 중복 검사
         if (userService.getClothes(loginId, clothesName) != null) {
             // 409 conflict
@@ -46,12 +47,12 @@ public class ClothesController {
                 .createdAt(clothes.getCreatedAt().toString())
                 .modifiedAt(clothes.getModifiedAt().toString())
                 .build();
-	String encodedUri = UriComponentsBuilder
+	    String encodedUri = UriComponentsBuilder
                 .fromPath("/clothes/name/{clothesName}")
                 .buildAndExpand(clothesName)
                 .encode()
                 .toUriString();
-	return ResponseEntity.created(URI.create(encodedUri))
+	    return ResponseEntity.created(URI.create(encodedUri))
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(response);
     }
@@ -70,8 +71,9 @@ public class ClothesController {
     }
 
     @GetMapping("/name/{clothesName}")
-    public ResponseEntity<ClothesResponse> viewOneClothes(@PathVariable("clothesName") String clothesName) {
+    public ResponseEntity<ClothesResponse> viewOneClothes(@PathVariable("clothesName") String urlClothesName) {
         String loginId = getCurrentLoginId();
+        String clothesName = UrlDecode(urlClothesName);
         Clothes clothes = userService.getClothes(loginId, clothesName);
         if (clothes == null) {
             log.info("사용자 {}에게 티셔츠 {}이 존재하지 않습니다.", loginId, clothesName);
@@ -90,8 +92,9 @@ public class ClothesController {
     }
 
     @PutMapping("/name/{clothesName}")
-    public ResponseEntity<Clothes> saveClothes(@PathVariable("clothesName") String clothesName) {
+    public ResponseEntity<Clothes> saveClothes(@PathVariable("clothesName") String urlClothesName) {
         String loginId = getCurrentLoginId();
+        String clothesName = UrlDecode(urlClothesName);
         Clothes clothes = userService.saveClothes(loginId, clothesName);
         log.info("사용자 {}의 티셔츠 {}을 저장합니다.", loginId, clothesName);
         return ResponseEntity.ok()
@@ -100,8 +103,9 @@ public class ClothesController {
     }
 
     @DeleteMapping("/name/{clothesName}")
-    public ResponseEntity<String> deleteClothes(@PathVariable("clothesName") String clothesName) {
+    public ResponseEntity<String> deleteClothes(@PathVariable("clothesName") String urlClothesName) {
         String loginId = getCurrentLoginId();
+        String clothesName = UrlDecode(urlClothesName);
         userService.deleteClothes(loginId, clothesName);
         log.info("사용자 {}의 티셔츠 {}을 삭제합니다.", loginId, clothesName);
         return ResponseEntity.noContent().build();
@@ -111,21 +115,26 @@ public class ClothesController {
     @PutMapping("/change-name")
     public ResponseEntity<?> changeClothesName(@RequestBody ChangeClothesNameRequest request) {
         String loginId = getCurrentLoginId();
-        String oldClothesName = request.getOldClothesName();
-        String newClothesName = request.getNewClothesName();
+        String oldClothesName = UrlDecode(request.getOldClothesName());
+        String newClothesName = UrlDecode(request.getNewClothesName());
         if (userService.getClothes(loginId, newClothesName) != null) {
             log.info("사용자 {}에게 티셔츠 {}이 이미 존재합니다.", loginId, newClothesName);
             return ResponseEntity.status(409).body("중복된 이름의 티셔츠가 존재합니다.");
         }
         Clothes clothes = userService.changeClothesName(loginId, oldClothesName, newClothesName);
-        log.info("사용자 {}의 티셔츠 {} 이름이 {}으로 변경되었습니다.", loginId, oldClothesName, newClothesName);
+        log.info("사용자 {}의 티셔츠 {} 이름이 {}으로 변경되었습니다.", loginId, oldClothesName, clothes.getClothesName());
         ClothesResponse response = ClothesResponse.builder()
                 .clothesName(clothes.getClothesName())
                 .roomId(clothes.getRoomId())
                 .createdAt(clothes.getCreatedAt().toString())
                 .modifiedAt(clothes.getModifiedAt().toString())
                 .build();
-        return ResponseEntity.ok()
+        String encodedUri = UriComponentsBuilder
+                .fromPath("/clothes/name/{clothesName}")
+                .buildAndExpand(response.getClothesName())
+                .encode()
+                .toUriString();
+        return ResponseEntity.created(URI.create(encodedUri))
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(response);
     }
