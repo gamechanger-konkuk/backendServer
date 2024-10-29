@@ -49,9 +49,6 @@ public class ImageServiceImpl implements ImageService {
         return imageRepository.save(Image.builder()
                 .fileName(FileUtils.getFileNameFromUrl(fileUrl))
                 .fileUrl(fileUrl)
-                .view(view)
-                .locationX(0.0f)    // 기본값. 중앙으로 설정하기. 프론트에서 전달해야 한다면 인자로 전달받기
-                .locationY(0.0f)
                 .clothes(clothes)
                 .build());
     }

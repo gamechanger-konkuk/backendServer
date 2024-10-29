@@ -28,12 +28,6 @@ public class Clothes {
     @NotNull
     private String clothesName;
     private String roomId;
-    @Column(length = 10)
-    @NotNull
-    private String shape;   // 기본 : 반팔 char나 int로 바이트 수 줄여도 됨
-    @Column(length = 20)
-    @NotNull
-    private String background;
 
     @CreatedDate
     @Column(updatable = false)
@@ -63,8 +57,6 @@ public class Clothes {
         StringBuilder str = new StringBuilder("Clothes{" +
                 "clothesName='" + clothesName + '\'' +
                 ", userLoginId='" + user.getLoginId() + '\'' +
-                ", shape='" + shape + '\'' +
-                ", background='" + background + '\'' +
                 ", fileList.size()='" + imageFileList.size() + '\'');
         for (int i = 0; i < imageFileList.size(); i++) {
             str.append(", image ").append(i).append("= ").append(imageFileList.get(i).toString());

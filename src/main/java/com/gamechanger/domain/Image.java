@@ -19,13 +19,6 @@ public class Image {
     private String fileName;
     @NotNull
     private String fileUrl;
-    @NotNull
-    private double locationX;
-    @NotNull
-    private double locationY;
-    @Column(length = 10)
-    @NotNull
-    private String view;
 
     @JsonIgnore
     @ManyToOne
@@ -41,9 +34,6 @@ public class Image {
     public String toString() {
         return "Image{" +
                 ", fileUrl='" + fileUrl + '\'' +
-                ", locationY=" + locationY +
-                ", locationX=" + locationX +
-                ", view='" + view + '\'' +
                 ", clothesName='" + clothes.getClothesName() + '\'' +
                 '}';
     }

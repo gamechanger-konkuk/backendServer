@@ -27,8 +27,6 @@ public class ClothesServiceImpl implements ClothesService {
         Clothes clothes = Clothes.builder()
                 .clothesName(clothesName)
                 .roomId(String.valueOf(UUID.randomUUID()))
-                .background("white")
-                .shape("half")
                 .imageFileList(new HashMap<>())
                 .user(user)
                 .build();
@@ -68,7 +66,11 @@ public class ClothesServiceImpl implements ClothesService {
 
     @Override
     public void deleteClothes(Long systemClothesId) {
-        Clothes clothes = clothesRepository.findBySystemClothesId(systemClothesId).get();
+        Optional<Clothes> optionalClothes = clothesRepository.findBySystemClothesId(systemClothesId);
+        if (optionalClothes.isEmpty()) {
+            return;
+        }
+        Clothes clothes = optionalClothes.get();
         for (Image image : clothes.getImageFileList().values()) {
             imageService.deleteImage(image.getFileName());
         }
@@ -89,7 +91,11 @@ public class ClothesServiceImpl implements ClothesService {
 
     @Override
     public Image uploadUserImage(Long systemClothesId, MultipartFile uploadImage, String clothesName) throws IOException {
-        Clothes clothes = clothesRepository.findBySystemClothesId(systemClothesId).get();
+        Optional<Clothes> optionalClothes = clothesRepository.findBySystemClothesId(systemClothesId);
+        if (optionalClothes.isEmpty()) {
+            return null;
+        }
+        Clothes clothes = optionalClothes.get();
         Image uploadedImage = imageService.uploadImage(clothes, uploadImage.getBytes(), "front");
         clothes.addImageFile(uploadedImage);
         return uploadedImage;
@@ -97,7 +103,11 @@ public class ClothesServiceImpl implements ClothesService {
 
     @Override
     public Image createAiImageByPrompt(Long systemClothesId, String clothesName, String style, String prompt) {
-        Clothes clothes = clothesRepository.findBySystemClothesId(systemClothesId).get();
+        Optional<Clothes> optionalClothes = clothesRepository.findBySystemClothesId(systemClothesId);
+        if (optionalClothes.isEmpty()) {
+            return null;
+        }
+        Clothes clothes = optionalClothes.get();
         Image aiImageByPrompt = imageService.createAiImageByPrompt(clothes, style, prompt);
         clothes.addImageFile(aiImageByPrompt);
         return aiImageByPrompt;
@@ -105,7 +115,11 @@ public class ClothesServiceImpl implements ClothesService {
 
     @Override
     public Image removeImageBackground(Long systemClothesId, String clothesName, String fileUrl) {
-        Clothes clothes = clothesRepository.findBySystemClothesId(systemClothesId).get();
+        Optional<Clothes> optionalClothes = clothesRepository.findBySystemClothesId(systemClothesId);
+        if (optionalClothes.isEmpty()) {
+            return null;
+        }
+        Clothes clothes = optionalClothes.get();
         Image removedImage = imageService.removeImageBackground(clothes, fileUrl);
         clothes.addImageFile(removedImage);
         return removedImage;
