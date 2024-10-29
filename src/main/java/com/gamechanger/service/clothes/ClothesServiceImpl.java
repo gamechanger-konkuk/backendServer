@@ -5,9 +5,7 @@ import com.gamechanger.domain.Image;
 import com.gamechanger.domain.User;
 import com.gamechanger.repository.ClothesRepository;
 import com.gamechanger.service.image.ImageService;
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
@@ -35,11 +33,12 @@ public class ClothesServiceImpl implements ClothesService {
                 .user(user)
                 .build();
         String[] defaultAccesses = {"room:write"};
+        Clothes savedClothes = clothesRepository.save(clothes);
         String responseRoomId = liveblocksService.createRoom(clothes.getRoomId(), defaultAccesses);
         // 룸 생성은 컨트롤러에서 하던지, save를 먼저 하던지 해야 할 듯?
         // NotNull이나 컬럼 길이 제한 같은게 레포에 save할 때 검사하는 것 같은데, 룸을 먼저 생성하니까 룸은 생성되고 옷은 생성 안되게 됨.
         log.info("Clothes Name: {}, Room Id: {} created.", clothesName, responseRoomId);
-        return clothesRepository.save(clothes);
+        return savedClothes;
     }
 
     @Override
@@ -84,7 +83,8 @@ public class ClothesServiceImpl implements ClothesService {
         Clothes clothes = clothesRepository.findBySystemClothesId(systemClothesId)
                 .orElseThrow(() -> new EntityNotFoundException("Clothes not found"));
         clothes.setClothesName(newClothesName);
-        return clothesRepository.save(clothes);
+        clothesRepository.save(clothes);
+        return clothesRepository.findBySystemClothesId(systemClothesId).orElse(null);
     }
 
     @Override
