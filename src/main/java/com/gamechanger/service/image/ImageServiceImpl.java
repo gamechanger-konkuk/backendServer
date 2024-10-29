@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Slf4j
 @RequiredArgsConstructor
 public class ImageServiceImpl implements ImageService {
@@ -70,5 +72,15 @@ public class ImageServiceImpl implements ImageService {
         Image image = imageRepository.findByFileName(fileName);
         image.removeImageFromClothes();
         imageRepository.deleteByFileName(fileName);
+    }
+
+    @Override
+    public void deleteAllImage(Clothes clothes) {
+        Long clothesId = clothes.getSystemClothesId();
+        List<Image> deletingImages = imageRepository.findImagesBySystemClothesId(clothesId);
+        for (Image image : deletingImages) {
+            fileService.deleteFile(image.getFileName());
+        }
+        imageRepository.deleteImagesBySystemClothesId(clothesId);
     }
 }

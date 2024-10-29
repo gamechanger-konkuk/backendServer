@@ -71,9 +71,7 @@ public class ClothesServiceImpl implements ClothesService {
             return;
         }
         Clothes clothes = optionalClothes.get();
-        for (Image image : clothes.getImageFileList().values()) {
-            imageService.deleteImage(image.getFileName());
-        }
+        imageService.deleteAllImage(clothes);
         String roomId = clothes.getRoomId();
         liveblocksService.deleteRoom(roomId);
         clothesRepository.deleteBySystemClothesId(systemClothesId);

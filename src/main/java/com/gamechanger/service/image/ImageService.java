@@ -13,4 +13,5 @@ public interface ImageService {
     Image getImage(String fileUrl);
     Image updateImage(Image Image);
     void deleteImage(String fileName);
+    void deleteAllImage(Clothes clothes);
 }
