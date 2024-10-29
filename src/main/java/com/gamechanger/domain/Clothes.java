@@ -15,6 +15,7 @@ import java.util.Map;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

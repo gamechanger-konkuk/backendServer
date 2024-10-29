@@ -13,7 +13,4 @@ public interface ClothesRepository extends JpaRepository<Clothes, String> {
     Optional<Clothes> findByClothesName(String clothesName);
     @Transactional
     void deleteBySystemClothesId(Long systemClothesId);
-    @Modifying
-    @Query("UPDATE Clothes c SET c.clothesName = :newClothesName WHERE c.systemClothesId = :systemClothesId")
-    void changeClothesName(Long systemClothesId, String newClothesName);
 }
