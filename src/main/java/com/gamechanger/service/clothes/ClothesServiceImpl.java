@@ -5,6 +5,9 @@ import com.gamechanger.domain.Image;
 import com.gamechanger.domain.User;
 import com.gamechanger.repository.ClothesRepository;
 import com.gamechanger.service.image.ImageService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
@@ -78,9 +81,10 @@ public class ClothesServiceImpl implements ClothesService {
 
     @Override
     public Clothes changeClothesName(Long systemClothesId, String newClothesName) {
-        clothesRepository.changeClothesName(systemClothesId, newClothesName);
-        Optional<Clothes> changedClothes = clothesRepository.findByClothesName(newClothesName);
-        return changedClothes.orElse(null);
+        Clothes clothes = clothesRepository.findBySystemClothesId(systemClothesId)
+                .orElseThrow(() -> new EntityNotFoundException("Clothes not found"));
+        clothes.setClothesName(newClothesName);
+        return clothesRepository.save(clothes);
     }
 
     @Override
