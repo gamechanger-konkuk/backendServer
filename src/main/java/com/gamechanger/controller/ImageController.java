@@ -1,10 +1,7 @@
 package com.gamechanger.controller;
 
 import com.gamechanger.domain.Image;
-import com.gamechanger.dto.front.image.CreateImageRequestByPrompt;
-import com.gamechanger.dto.front.image.DeleteImageRequest;
-import com.gamechanger.dto.front.image.FileResponse;
-import com.gamechanger.dto.front.image.RemoveBackgroundRequest;
+import com.gamechanger.dto.front.image.*;
 import com.gamechanger.service.image.ImageService;
 import com.gamechanger.service.user.UserService;
 import com.gamechanger.util.FileUtils;
@@ -17,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 import static com.gamechanger.util.jwt.JwtUtils.getCurrentLoginId;
 
@@ -74,19 +72,20 @@ public class ImageController {
                 .body(response);
     }
 
+    @PostMapping("/recommend-prompt")
+    public ResponseEntity<List<String>> recommendPrompt(@RequestBody RecommendPromptRequest request) {
+        String user_prompt = request.getPrompt();
+        List<String> prompt_list = imageService.recommendPrompt(user_prompt, 10);
+        log.info("입력한 프롬프트 {}에 적합한 프롬프트를 추천합니다.", user_prompt);
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(prompt_list);
+    }
+
     @PostMapping("/delete")
     public ResponseEntity<?> deleteImage(@RequestBody DeleteImageRequest deleteImageRequest) {
         String fileName = FileUtils.getFileNameFromUrl(deleteImageRequest.getFileUrl());
         imageService.deleteImage(fileName);
         return ResponseEntity.noContent().build();
     }
-
-//    @PostMapping("/edit/{fileName}")
-//    public ResponseEntity<FileResponseDto> saveEditedImage(@RequestPart("imageFile") MultipartFile multipartFile, @PathVariable String fileName) {
-//        imageService.deleteImage(fileName);
-//        Image editedImage = imageService.uploadExistingImage(multipartFile, "front");
-//        return ResponseEntity.ok()
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .body(new FileResponseDto(editedImage.getFileName(), editedImage.getFileUrl()));
-//    }
 }
