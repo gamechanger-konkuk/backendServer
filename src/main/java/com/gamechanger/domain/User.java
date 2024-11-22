@@ -32,11 +32,7 @@ public class User {
     @NotNull(message = "이름을 입력해야 합니다.")
     private String userName;
 
-    private String picture;
-
     private String provider;
-
-    private String provideId;
 
     @Enumerated(EnumType.STRING)
     @NotNull

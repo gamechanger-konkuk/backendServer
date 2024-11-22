@@ -33,6 +33,7 @@ public class ClothesController {
     public ResponseEntity<?> createClothes(@Valid @RequestBody CreateClothesRequest createClothesRequest) throws ParseException {
         String loginId = getCurrentLoginId();
         String clothesName = UrlDecode(createClothesRequest.getClothesName());
+        log.info("사용자 {}에게 티셔츠 {} 생성을 시도합니다.", loginId, clothesName);
         // 티셔츠 중복 검사
         if (userService.getClothes(loginId, clothesName) != null) {
             // 409 conflict
@@ -60,8 +61,9 @@ public class ClothesController {
     @GetMapping("/view")
     public ResponseEntity<List<Clothes>> viewAllClothes() {
         String loginId = getCurrentLoginId();
-        List<Clothes> allClothes = userService.getAllClothes(loginId);
         log.info("사용자 {}의 모든 티셔츠를 조회합니다.", loginId);
+        List<Clothes> allClothes = userService.getAllClothes(loginId);
+        log.info("사용자 {}의 모든 티셔츠가 조회되었습니다.", loginId);
         if (allClothes.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -74,12 +76,13 @@ public class ClothesController {
     public ResponseEntity<ClothesResponse> viewOneClothes(@PathVariable("clothesName") String urlClothesName) {
         String loginId = getCurrentLoginId();
         String clothesName = UrlDecode(urlClothesName);
+        log.info("사용자 {}의 티셔츠 {}을 조회합니다.", loginId, clothesName);
         Clothes clothes = userService.getClothes(loginId, clothesName);
         if (clothes == null) {
             log.info("사용자 {}에게 티셔츠 {}이 존재하지 않습니다.", loginId, clothesName);
             return ResponseEntity.notFound().build();
         }
-        log.info("사용자 {}의 티셔츠 {}을 조회합니다.", loginId, clothesName);
+        log.info("사용자 {}의 티셔츠 {}가 조회되었습니다.", loginId, clothesName);
         ClothesResponse response = ClothesResponse.builder()
                 .roomId(clothes.getRoomId())
                 .clothesName(clothes.getClothesName())
@@ -95,8 +98,9 @@ public class ClothesController {
     public ResponseEntity<Clothes> saveClothes(@PathVariable("clothesName") String urlClothesName) {
         String loginId = getCurrentLoginId();
         String clothesName = UrlDecode(urlClothesName);
-        Clothes clothes = userService.saveClothes(loginId, clothesName);
         log.info("사용자 {}의 티셔츠 {}을 저장합니다.", loginId, clothesName);
+        Clothes clothes = userService.saveClothes(loginId, clothesName);
+        log.info("사용자 {}의 티셔츠 {}가 저장되었습니다.", loginId, clothesName);
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(clothes);
@@ -106,8 +110,9 @@ public class ClothesController {
     public ResponseEntity<String> deleteClothes(@PathVariable("clothesName") String urlClothesName) {
         String loginId = getCurrentLoginId();
         String clothesName = UrlDecode(urlClothesName);
-        userService.deleteClothes(loginId, clothesName);
         log.info("사용자 {}의 티셔츠 {}을 삭제합니다.", loginId, clothesName);
+        userService.deleteClothes(loginId, clothesName);
+        log.info("사용자 {}의 티셔츠 {}가 삭제되었습니다.", loginId, clothesName);
         return ResponseEntity.noContent().build();
     }
 
